@@ -34,6 +34,7 @@ $session = Session::getInstance();
 $account = new Account($database, $session);
 
 function redirect($url, $alert = NULL, $error = NULL) {
+    $url = WORKING_DIRECTORY."/$url";
     if ($alert) {
         $url .= "?alert=$alert";
         if ($error) {

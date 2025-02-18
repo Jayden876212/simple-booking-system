@@ -1,8 +1,0 @@
-RewriteEngine On
-RewriteBase /
-
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-
-RewriteCond %{REQUEST_URI} ^/simple-booking-system/
-RewriteRule ^simple-booking-system/(.*)$ /Notes/Knowledge/College/T%20Level%20in%20Digital%20Production,%20Design,%20and%20Development/Year%202%20-%20Occupational%20Specialism/6%20-%20Creating%20a%20Solution/Projects/Simple%20Booking%20System/src/index.php [L,QSA]

@@ -20,7 +20,7 @@
             <div class="card-footer container-fluid">
                 <div class="row">
                     <div class="col-md-6">
-                        <a href="account/login"><button type="button" class="btn btn-primary text-center w-100">Log In</button></a>
+                        <a href="<?=HOST?><?=WORKING_DIRECTORY?>/account/login"><button type="button" class="btn btn-primary text-center w-100">Log In</button></a>
                     </div>
                     <div class="col-md-6">
                         <button type="submit" class="btn btn-success w-100" name="sign_up" value="true">Sign Up</button>
