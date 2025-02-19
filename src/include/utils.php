@@ -33,9 +33,17 @@ require_once "connect.php";
 $session = Session::getInstance();
 $account = new Account($database, $session);
 
-function redirect($url, $alert = NULL, $error = NULL) {
+function redirect($url, $alert = NULL, $error = NULL, $intended_page = NULL) {
     $url = WORKING_DIRECTORY."/$url";
-    if ($alert) {
+    if ($intended_page) {
+        $url .= "?intended_page=$intended_page";
+        if ($alert) {
+            $url .= "&alert=$alert";
+            if ($error) {
+                $url .= "&error=true";
+            }
+        }
+    } else if ($alert) {
         $url .= "?alert=$alert";
         if ($error) {
             $url .= "&error=true";
