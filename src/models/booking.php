@@ -40,16 +40,27 @@ class Booking
             return $operation->createMessage(AccountError::USER_LOGGED_OUT, AccountError::USER_LOGGED_OUT);
         }
         
-        $create_booking = $this->database->database_handle->prepare(
-            "INSERT INTO bookings
-                (timeslot_start_time, username, booking_date)
-            VALUES
-                (:timeslot_start_time, :username, :booking_date)"
-        );
-        $create_booking->execute([
-            "timeslot_start_time" => $timeslot_start_time,
-            "username" => $this->session->username,
-            "booking_date" => $booking_date
-        ]);
+        try {
+            $create_booking = $this->database->database_handle->prepare(
+                "INSERT INTO bookings
+                    (timeslot_start_time, username, booking_date)
+                VALUES
+                    (:timeslot_start_time, :username, :booking_date)"
+            );
+            $created_booking = $create_booking->execute([
+                "timeslot_start_time" => $timeslot_start_time,
+                "username" => $this->session->username,
+                "booking_date" => $booking_date
+            ]);
+            if (! $created_booking) {
+                $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+            } else {
+                $operation->createMessage("Successfully created booking!");
+            }
+        } catch (PDOException $exception) {
+            $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+        }
+
+        return $operation;
     }
 }

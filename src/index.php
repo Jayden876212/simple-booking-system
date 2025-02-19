@@ -1,6 +1,8 @@
 <?php
 
 require_once "include/utils.php";
+require_once "models/booking.php";
+
 require_once "controllers/accounts.php";
 require_once "controllers/home.php";
 require_once "controllers/bookings.php";
