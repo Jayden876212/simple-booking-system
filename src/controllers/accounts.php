@@ -49,7 +49,12 @@ class LoginController {
         if ($form_submitted) {
             $logged_in = $this->account->logIn($username, $password);
             if (! $logged_in->error) {
-                redirect("home", $logged_in->message);
+                $target_page = $_POST["target_page"] ?? FALSE;
+                if ($target_page) {
+                    redirect($target_page, $logged_in->message);
+                } else {
+                    redirect("home", $logged_in->message);
+                }
             } else {
                 redirect("account/login", $logged_in->message, CrudOperation::IS_ERROR);
             }

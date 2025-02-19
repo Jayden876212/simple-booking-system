@@ -16,6 +16,9 @@
                     <label for="passwordInput" class="form-label">Password:</label>
                     <input type="password" class="form-control" id="passwordInput" name="password" required minlength="1" maxlength="<?=Account::MAX_PASSWORD_LENGTH?>">
                 </div>
+                <?php if (isset($_GET["intended_page"])): ?>
+                    <input type="hidden" id="targetPage" name="target_page" value="<?=$_GET["intended_page"]?>">
+                <?php endif ?>
             </div>
             <div class="card-footer container-fluid">
                 <div class="row">
