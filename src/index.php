@@ -3,6 +3,7 @@
 require_once "include/utils.php";
 require_once "controllers/accounts.php";
 require_once "controllers/home.php";
+require_once "controllers/bookings.php";
 
 const HOST = "http://localhost";
 const WORKING_DIRECTORY = "/simple-booking-system/src";
@@ -32,6 +33,10 @@ switch (strtok($request, "?")) {
         break;
     case "/account/delete":
         $controller = new AccountDeletionController($session, $account);
+        $controller->handleRequest();
+        break;
+    case "/bookings":
+        $controller = new BookingsController($session, $account);
         $controller->handleRequest();
         break;
     default:

@@ -15,6 +15,9 @@
                 <li class="nav-item">
                     <a class="nav-link <?=((PAGE_TITLE == "Sign Up") OR (PAGE_TITLE == "Log In")) ? "active" : "" ?>" <?=((PAGE_TITLE == "Sign Up") OR (PAGE_TITLE == "Log In")) ? "aria-current='page'" : "" ?> href="<?=HOST?><?=WORKING_DIRECTORY?>/account/login">Account</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link <?=PAGE_TITLE == "Bookings" ? "active" : "" ?>" <?=PAGE_TITLE == "Bookings" ? "aria-current='page'" : "" ?> href="<?=HOST?><?=WORKING_DIRECTORY?>/bookings">Bookings</a>
+                </li>
             </ul>
             <div class="btn-group dropstart">
                 <button
