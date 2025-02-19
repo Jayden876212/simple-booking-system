@@ -36,7 +36,7 @@ switch (strtok($request, "?")) {
         $controller->handleRequest();
         break;
     case "/bookings":
-        $controller = new BookingsController($session, $account);
+        $controller = new BookingsController($session, $account, $database);
         $controller->handleRequest();
         break;
     default:
