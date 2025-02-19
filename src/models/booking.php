@@ -63,4 +63,18 @@ class Booking
 
         return $operation;
     }
+
+    public function getUnavailableTimeslots($booking_date) {
+        $operation = new CrudOperation();
+
+        $get_unavailable_timeslots = $this->database->database_handle->prepare(
+            "SELECT COUNT(booking_id) AS number_of_tables_booked, timeslot_start_time FROM bookings WHERE booking_date = :booking_date GROUP BY timeslot_start_time HAVING number_of_tables_booked >= 10"
+        );
+        $get_unavailable_timeslots->execute([
+            "booking_date" => $booking_date
+        ]);
+        $unavailable_timeslots = $get_unavailable_timeslots->fetchAll();
+
+        return $operation->createMessage("Fetched unavailable timeslots successfully.", CrudOperation::NO_ERRORS, $unavailable_timeslots);
+    }
 }
