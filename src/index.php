@@ -41,6 +41,10 @@ switch (strtok($request, "?")) {
         $controller = new BookingsController($session, $account, $database);
         $controller->handleRequest();
         break;
+    case "/bookings/get-unavailable-timeslots":
+        $controller = new TimeslotController($database);
+        $controller->handleRequest();
+        break;
     default:
         echo $request;
         echo "404 not found";
