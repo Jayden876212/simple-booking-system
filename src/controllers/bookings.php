@@ -28,8 +28,7 @@ class BookingsController
             redirect("bookings", CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
         }
 
-
-        $unavailable_timeslots = $this->booking->getUnavailableTimeslots("2025-02-12");
+        $unavailable_timeslots = $this->booking->getUnavailableTimeslots(date("Y-m-d"));
         $create_booking = $_POST["create_booking"] ?? FALSE;
         $timeslot_start_time = $_POST["timeslot_start_time"] ?? FALSE;
         $booking_date = $_POST["booking_date"] ?? FALSE;
