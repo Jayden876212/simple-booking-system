@@ -21,14 +21,20 @@
                         $timeslot["timeslot_start_time"])
                     )->format("H:i");
                 ?>
+                <?=strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z")?>
+                <?=time()?>
                 <?php if (isset($unavailable_timeslots->result)): ?>
                     <?php foreach ($unavailable_timeslots->result as $unavailable_timeslot): ?>
-                        <?php if ($unavailable_timeslot["timeslot_start_time"] != $timeslot["timeslot_start_time"]): ?>
+                        <?php if (strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z") < time()): ?>
+                            <option value="<?=$timeslot["timeslot_start_time"]?>" disabled><?=$timeslot_start_time?></option>
+                        <?php elseif ($unavailable_timeslot["timeslot_start_time"] != $timeslot["timeslot_start_time"]): ?>
                             <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
                         <?php else: ?>
                             <option value="<?=$timeslot["timeslot_start_time"]?>" disabled class="text-warning"><?=$timeslot_start_time?></option>
                         <?php endif ?>
                     <?php endforeach ?>
+                <?php elseif (strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z") < time()): ?>
+                    <option value="<?=$timeslot["timeslot_start_time"]?>" disabled><?=$timeslot_start_time?></option>
                 <?php else: ?>
                     <option value="<?=$timeslot["timeslot_start_time"]?>" disabled class="text-warning"><?=$timeslot_start_time?></option>
                 <?php endif ?>
