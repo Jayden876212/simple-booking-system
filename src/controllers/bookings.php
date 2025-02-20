@@ -28,6 +28,8 @@ class BookingsController
             redirect("bookings", CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
         }
 
+
+        $unavailable_timeslots = $this->booking->getUnavailableTimeslots("2025-02-12");
         $create_booking = $_POST["create_booking"] ?? FALSE;
         $timeslot_start_time = $_POST["timeslot_start_time"] ?? FALSE;
         $booking_date = $_POST["booking_date"] ?? FALSE;
@@ -49,8 +51,25 @@ class BookingsController
 class TimeslotController
 {
     private $database;
+    private $session;
+    private $account;
 
-    public function __construct(Database $database) {
+    public function __construct(Database $database, Session $session, Account $account) {
         $this->database = $database;
+        $this->session = $session;
+        $this->account = $account;
+    }
+
+    public function handleRequest() {
+        $chosen_booking_date = $_REQUEST["booking_date"] ?? FALSE;
+        if ($chosen_booking_date) {
+            // echo $chosen_booking_date;
+            $booking = new Booking($this->database, $this->session, $this->account);
+            $unavailable_timeslots = $booking->getUnavailableTimeslots($chosen_booking_date);
+            $unavailable_timeslots_processed = array_column($unavailable_timeslots->result, "number_of_tables_booked", "timeslot_start_time");
+            $unavailable_timeslots_json =  json_encode($unavailable_timeslots_processed);
+            echo $unavailable_timeslots_json;
+        }
+        exit;
     }
 }

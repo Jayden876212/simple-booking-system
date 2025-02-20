@@ -42,7 +42,7 @@ switch (strtok($request, "?")) {
         $controller->handleRequest();
         break;
     case "/bookings/get-unavailable-timeslots":
-        $controller = new TimeslotController($database);
+        $controller = new TimeslotController($database, $session, $account);
         $controller->handleRequest();
         break;
     default:

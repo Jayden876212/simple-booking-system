@@ -11,11 +11,19 @@ class Timeslot
     public function getTimeslots() {
         $operation = new CrudOperation();
 
-        $get_timeslots = $this->database->database_handle->prepare(
-            "SELECT timeslot_start_time FROM timeslots"
-        );
-        $get_timeslots->execute();
-        $timeslots = $get_timeslots->fetchAll();
+        try {
+            $get_timeslots = $this->database->database_handle->prepare(
+                "SELECT timeslot_start_time FROM timeslots"
+            );
+            $gotten_timeslots = $get_timeslots->execute();
+            if ($gotten_timeslots) {
+                $timeslots = $get_timeslots->fetchAll();
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR . "Failed to fetch timeslots.", CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR . "Failed to fetch timeslots.", CrudOperation::DATABASE_ERROR);
+        }
 
         return $operation->createMessage("Fetched timeslots successfully.", CrudOperation::NO_ERRORS, $timeslots);
     }
@@ -67,13 +75,23 @@ class Booking
     public function getUnavailableTimeslots($booking_date) {
         $operation = new CrudOperation();
 
-        $get_unavailable_timeslots = $this->database->database_handle->prepare(
-            "SELECT COUNT(booking_id) AS number_of_tables_booked, timeslot_start_time FROM bookings WHERE booking_date = :booking_date GROUP BY timeslot_start_time HAVING number_of_tables_booked >= 10"
-        );
-        $get_unavailable_timeslots->execute([
-            "booking_date" => $booking_date
-        ]);
-        $unavailable_timeslots = $get_unavailable_timeslots->fetchAll();
+        try {
+            $get_unavailable_timeslots = $this->database->database_handle->prepare(
+                "SELECT COUNT(booking_id) AS number_of_tables_booked, timeslot_start_time FROM bookings
+                WHERE booking_date = :booking_date GROUP BY timeslot_start_time
+                HAVING number_of_tables_booked >= 2"
+            );
+            $gotten_unavailable_timeslots = $get_unavailable_timeslots->execute([
+                "booking_date" => $booking_date
+            ]);
+            if ($gotten_unavailable_timeslots) {
+                $unavailable_timeslots = $get_unavailable_timeslots->fetchAll();
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR . "Failed to fetch unavailable timeslots", CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR . "Failed to fetch unavailable timeslots.", CrudOperation::DATABASE_ERROR);
+        }
 
         return $operation->createMessage("Fetched unavailable timeslots successfully.", CrudOperation::NO_ERRORS, $unavailable_timeslots);
     }
