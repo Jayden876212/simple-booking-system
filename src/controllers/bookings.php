@@ -66,9 +66,11 @@ class TimeslotController
             // echo $chosen_booking_date;
             $booking = new Booking($this->database, $this->session, $this->account);
             $unavailable_timeslots = $booking->getUnavailableTimeslots($chosen_booking_date);
-            $unavailable_timeslots_processed = array_column($unavailable_timeslots->result, "number_of_tables_booked", "timeslot_start_time");
-            $unavailable_timeslots_json =  json_encode($unavailable_timeslots_processed);
-            echo $unavailable_timeslots_json;
+            if (! isset($unavailable_timeslots->error) && isset($unavailable_timeslots->result)) {
+                $unavailable_timeslots_processed = array_column($unavailable_timeslots->result, "number_of_tables_booked", "timeslot_start_time");
+                $unavailable_timeslots_json =  json_encode($unavailable_timeslots_processed);
+                echo $unavailable_timeslots_json;
+            }
         }
         exit;
     }
