@@ -141,7 +141,7 @@ class Booking
             $get_unavailable_timeslots = $this->database->database_handle->prepare(
                 "SELECT COUNT(booking_id) AS number_of_tables_booked, timeslot_start_time FROM bookings
                 WHERE booking_date = :booking_date GROUP BY timeslot_start_time
-                HAVING number_of_tables_booked >= 2"
+                HAVING number_of_tables_booked >= 10"
             );
             $gotten_unavailable_timeslots = $get_unavailable_timeslots->execute([
                 "booking_date" => $booking_date
