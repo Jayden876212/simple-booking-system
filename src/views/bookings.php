@@ -6,10 +6,10 @@
 <h1><?=PAGE_TITLE?></h1>
 
 <form action="" method="POST">
-    <input value="<?=date("Y-m-d")?>" type="date" name="booking_date" id="bookingDate" onchange="
+    <input value="<?=date("Y-m-d")?>" type="date" name="booking_date" id="bookingDate" required min="<?=date("Y-m-d")?>" onchange="
         getUnavailableTimeslots('<?=HOST?><?=WORKING_DIRECTORY?>/bookings/get-unavailable-timeslots', this.value, disableUnavailableTimeslots)
     ">
-    <select name="timeslot_start_time" id="timeslotStartTime" class="form-select">
+    <select name="timeslot_start_time" id="timeslotStartTime" class="form-select" required>
         <?php if (
             is_object($timeslots) && isset($timeslots->result) && (! isset($timeslots->error))
             && is_object($unavailable_timeslots) && (! isset($unavailable_timeslots->error))
