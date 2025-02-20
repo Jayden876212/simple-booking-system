@@ -26,11 +26,9 @@ function disableUnavailableTimeslots(data) {
     options.each(function() {
         if (data.hasOwnProperty(this.value)) {
             number_of_tables_booked = data[this.value];
-            console.log(number_of_tables_booked + this);
             this.setAttribute("disabled", "")
             this.classList.add("text-warning");
         } else {
-            console.log(this);
             this.removeAttribute("disabled")
             this.classList.remove("text-warning");
         }
