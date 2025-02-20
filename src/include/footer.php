@@ -16,5 +16,8 @@
             const HOST = "<?=HOST?>";
             const WORKING_DIRECTORY = "<?=WORKING_DIRECTORY?>";
         </script>
+
+        <!-- Bespoke Scripts -->
+        <script src="include/timeslots.js"></script>
     </body>
 </html>
