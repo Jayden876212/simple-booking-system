@@ -20,12 +20,14 @@ function getUnavailableTimeslots(url, booking_date, callback) {
 
 function disableUnavailableTimeslots(data) {
     let timeslotStartTimeInput = $("#timeslotStartTime");
+    let timeslotPlaceholder = $("#timeslotPlaceholder")
+    timeslotStartTimeInput.val(timeslotPlaceholder.val());
     options = timeslotStartTimeInput.children();
     options.each(function() {
         if (data.hasOwnProperty(this.value)) {
             number_of_tables_booked = data[this.value];
             console.log(number_of_tables_booked + this);
-            this.setAttribute("disabled", "true")
+            this.setAttribute("disabled", "")
             this.classList.add("text-warning");
         } else {
             console.log(this);

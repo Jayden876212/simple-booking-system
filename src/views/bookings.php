@@ -8,9 +8,9 @@
 <form action="" method="POST">
     <input type="date" name="booking_date" id="bookingDate" onchange="
         getUnavailableTimeslots('<?=HOST?><?=WORKING_DIRECTORY?>/bookings/get-unavailable-timeslots', this.value, disableUnavailableTimeslots)
-    " required>
-    <select name="timeslot_start_time" id="timeslotStartTime" class="form-select" required>
-        <option selected value="">Please choose a timeslot</option>
+    ">
+    <select name="timeslot_start_time" id="timeslotStartTime" class="form-select">
+        <option id="timeslotPlaceholder" selected value="">Please choose a timeslot</option>
         <?php if (
             is_object($timeslots) && isset($timeslots->result) && (! isset($timeslots->error))
             && is_object($unavailable_timeslots) && isset($unavailable_timeslots->result) && (! isset($unavailable_timeslots->error))
