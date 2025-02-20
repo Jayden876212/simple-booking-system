@@ -36,7 +36,7 @@
                 <?php elseif (strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z") < time()): ?>
                     <option value="<?=$timeslot["timeslot_start_time"]?>" disabled><?=$timeslot_start_time?></option>
                 <?php else: ?>
-                    <option value="<?=$timeslot["timeslot_start_time"]?>" disabled class="text-warning"><?=$timeslot_start_time?></option>
+                    <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
                 <?php endif ?>
             <?php endforeach ?>
         <?php elseif (isset($timeslots->error) or isset($unavailable_timeslots->error)): ?>
