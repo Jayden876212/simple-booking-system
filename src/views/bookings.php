@@ -52,6 +52,8 @@
                             <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
                             <?php break;
                     endswitch ?>
+                <?php else: ?>
+                    <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
                 <?php endif ?>
             <?php endforeach ?>
         <?php elseif (isset($timeslots->error) or isset($unavailable_timeslots->error)): ?>
