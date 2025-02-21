@@ -1,6 +1,12 @@
 <?php
     const PAGE_TITLE = "Bookings";
     include_once "include/base.php";
+
+    enum TimeslotStatus {
+        case IN_THE_PAST;
+        case UNAVAILABLE;
+        case AVAILABLE;
+    }
 ?>
 
 <h1><?=PAGE_TITLE?></h1>
@@ -16,27 +22,37 @@
         ): ?>
             <option id="timeslotPlaceholder" selected value="">Please choose a timeslot</option>
             <?php foreach ($timeslots->result as $timeslot): ?>
+                <?=var_dump($timeslot)?>
                 <?php
                     $timeslot_start_time = (new DateTime(
                         $timeslot["timeslot_start_time"])
                     )->format("H:i");
                 ?>
-                <?=strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z")?>
-                <?=time()?>
                 <?php if (isset($unavailable_timeslots->result)): ?>
-                    <?php foreach ($unavailable_timeslots->result as $unavailable_timeslot): ?>
-                        <?php if (strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z") < time()): ?>
+                    <?php
+                        $timeslot_status = TimeslotStatus::AVAILABLE;
+                        if (strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z") < time()) {
+                            $timeslot_status = TimeslotStatus::IN_THE_PAST;
+                        } else {
+                            foreach ($unavailable_timeslots->result as $unavailable_timeslot) {
+                                if ($unavailable_timeslot["timeslot_start_time"] == $timeslot["timeslot_start_time"]) {
+                                    $timeslot_status = TimeslotStatus::UNAVAILABLE;
+                                    break;
+                                }
+                            }
+                        }
+                    ?>
+                    <?php switch ($timeslot_status):
+                        case TimeslotStatus::IN_THE_PAST: ?>
                             <option value="<?=$timeslot["timeslot_start_time"]?>" disabled><?=$timeslot_start_time?></option>
-                        <?php elseif ($unavailable_timeslot["timeslot_start_time"] != $timeslot["timeslot_start_time"]): ?>
-                            <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
-                        <?php else: ?>
+                            <?php break;
+                        case TimeslotStatus::UNAVAILABLE: ?>
                             <option value="<?=$timeslot["timeslot_start_time"]?>" disabled class="text-warning"><?=$timeslot_start_time?></option>
-                        <?php endif ?>
-                    <?php endforeach ?>
-                <?php elseif (strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z") < time()): ?>
-                    <option value="<?=$timeslot["timeslot_start_time"]?>" disabled><?=$timeslot_start_time?></option>
-                <?php else: ?>
-                    <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
+                            <?php break;
+                        case TimeslotStatus::AVAILABLE: ?>
+                            <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
+                            <?php break;
+                    endswitch ?>
                 <?php endif ?>
             <?php endforeach ?>
         <?php elseif (isset($timeslots->error) or isset($unavailable_timeslots->error)): ?>

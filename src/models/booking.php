@@ -88,8 +88,16 @@ class Booking
         }
 
         $unavailable_timeslots = $this->getUnavailableTimeslots($booking_date);
+        $specific_timeslot_unavailable = FALSE;
         if (isset($unavailable_timeslots->error)) {
             return $operation->createMessage($unavailable_timeslots->error, $unavailable_timeslots->error);
+        } else if (isset($unavailable_timeslots->result)) {
+            foreach ($unavailable_timeslots->result as $unavailable_timeslot) {
+                if ($unavailable_timeslot["timeslot_start_time"] == $timeslot_start_time) {
+                    $specific_timeslot_unavailable = TRUE;
+                    break;
+                }
+            }
         }
 
         $error = match(true) {
@@ -100,7 +108,7 @@ class Booking
             (strtotime($booking_date) < time()) AND ($booking_date != date("Y-m-d")) => BookingError::BOOKING_DATE_IN_PAST,
             time() > strtotime(date("$booking_date $timeslot_start_time")) => BookingError::TIMESLOT_IN_PAST,
             isset($existing_timeslot->result) ? FALSE : TRUE => BookingError::TIMESLOT_NOT_EXIST,
-            isset($unavailable_timeslots->result) ? TRUE : FALSE => BookingError::UNAVAILABLE_TIMESLOT,
+            $specific_timeslot_unavailable => BookingError::UNAVAILABLE_TIMESLOT,
             default => CrudOperation::NO_ERRORS
         };
 
