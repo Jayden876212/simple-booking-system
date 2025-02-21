@@ -3,15 +3,13 @@
 class BookingsController
 {
     private $session;
-    private $account;
     private $database;
     private $booking;
 
-    public function __construct(Session $session, Account $account, Database $database) {
+    public function __construct(Session $session, Database $database) {
         $this->session = $session;
-        $this->account = $account;
         $this->database = $database;
-        $this->booking = new Booking($this->database, $this->session, $this->account);
+        $this->booking = new Booking($this->database, $this->session);
     }
 
     public function handleRequest() {
@@ -51,19 +49,17 @@ class TimeslotController
 {
     private $database;
     private $session;
-    private $account;
 
-    public function __construct(Database $database, Session $session, Account $account) {
+    public function __construct(Database $database, Session $session) {
         $this->database = $database;
         $this->session = $session;
-        $this->account = $account;
     }
 
     public function handleRequest() {
         $chosen_booking_date = $_REQUEST["booking_date"] ?? FALSE;
         if ($chosen_booking_date) {
             // echo $chosen_booking_date;
-            $booking = new Booking($this->database, $this->session, $this->account);
+            $booking = new Booking($this->database, $this->session);
             $unavailable_timeslots = $booking->getUnavailableTimeslots($chosen_booking_date);
             if (! isset($unavailable_timeslots->error) && isset($unavailable_timeslots->result)) {
                 $unavailable_timeslots_processed = array_column($unavailable_timeslots->result, "number_of_tables_booked", "timeslot_start_time");
@@ -78,15 +74,13 @@ class TimeslotController
 class OrdersController
 {
     private $session;
-    private $account;
     private $database;
     private $booking;
 
-    public function __construct(Session $session, Account $account, Database $database) {
+    public function __construct(Session $session, Database $database) {
         $this->session = $session;
-        $this->account = $account;
         $this->database = $database;
-        $this->booking = new Booking($this->database, $this->session, $this->account);
+        $this->booking = new Booking($this->database, $this->session);
     }
 
     public function handleRequest() {

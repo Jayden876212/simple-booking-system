@@ -67,12 +67,10 @@ class Booking
 {
     private $database;
     private $session;
-    private $account;
 
-    public function __construct(Database $database, Session $session, Account $account) {
+    public function __construct(Database $database, Session $session) {
         $this->database = $database;
         $this->session = $session;
-        $this->account = $account;
     }
 
     public function createBooking($timeslot_start_time, $booking_date) {

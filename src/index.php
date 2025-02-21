@@ -38,15 +38,15 @@ switch (strtok($request, "?")) {
         $controller->handleRequest();
         break;
     case "/bookings":
-        $controller = new BookingsController($session, $account, $database);
+        $controller = new BookingsController($session, $database);
         $controller->handleRequest();
         break;
     case "/bookings/get-unavailable-timeslots":
-        $controller = new TimeslotController($database, $session, $account);
+        $controller = new TimeslotController($database, $session);
         $controller->handleRequest();
         break;
     case "/bookings/orders":
-        $controller = new OrdersController($session, $account, $database);
+        $controller = new OrdersController($session, $database);
         $controller->handleRequest();
         break;
     default:
