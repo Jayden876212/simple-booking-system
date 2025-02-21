@@ -74,3 +74,29 @@ class TimeslotController
         exit;
     }
 }
+
+class OrdersController
+{
+    private $session;
+    private $account;
+    private $database;
+    private $booking;
+
+    public function __construct(Session $session, Account $account, Database $database) {
+        $this->session = $session;
+        $this->account = $account;
+        $this->database = $database;
+        $this->booking = new Booking($this->database, $this->session, $this->account);
+    }
+
+    public function handleRequest() {
+        require_once "include/utils.php";
+
+        if (! isset($this->session->username)) {
+            redirect("account/login", AccountError::USER_LOGGED_OUT, AccountError::USER_LOGGED_OUT, "bookings/orders");
+        }
+
+        require "views/orders.php";
+        exit();
+    }
+}

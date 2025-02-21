@@ -45,6 +45,10 @@ switch (strtok($request, "?")) {
         $controller = new TimeslotController($database, $session, $account);
         $controller->handleRequest();
         break;
+    case "/bookings/orders":
+        $controller = new OrdersController($session, $account, $database);
+        $controller->handleRequest();
+        break;
     default:
         echo $request;
         echo "404 not found";

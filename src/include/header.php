@@ -18,6 +18,9 @@
                 <li class="nav-item">
                     <a class="nav-link <?=PAGE_TITLE == "Bookings" ? "active" : "" ?>" <?=PAGE_TITLE == "Bookings" ? "aria-current='page'" : "" ?> href="<?=HOST?><?=WORKING_DIRECTORY?>/bookings">Bookings</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link <?=PAGE_TITLE == "Orders" ? "active" : "" ?>" <?=PAGE_TITLE == "Orders" ? "aria-current='page'" : "" ?> href="<?=HOST?><?=WORKING_DIRECTORY?>/bookings/orders">Orders</a>
+                </li>
             </ul>
             <div class="btn-group dropstart">
                 <button
