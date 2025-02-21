@@ -142,7 +142,6 @@ class Booking
     public function getUnavailableTimeslots($booking_date) {
         $operation = new CrudOperation();
 
-
         try {
             $get_unavailable_timeslots = $this->database->database_handle->prepare(
                 "SELECT COUNT(booking_id) AS number_of_tables_booked, timeslot_start_time FROM bookings
@@ -154,6 +153,7 @@ class Booking
             ]);
             if ($gotten_unavailable_timeslots) {
                 $unavailable_timeslots = $get_unavailable_timeslots->fetchAll();
+                return $operation->createMessage("Fetched unavailable timeslots successfully.", CrudOperation::NO_ERRORS, $unavailable_timeslots);
             } else {
                 return $operation->createMessage(CrudOperation::DATABASE_ERROR . "Failed to fetch unavailable timeslots", CrudOperation::DATABASE_ERROR);
             }
@@ -165,7 +165,6 @@ class Booking
     public function getBookings($username) {
         $operation = new CrudOperation();
 
-        return $operation->createMessage("Fetched unavailable timeslots successfully.", CrudOperation::NO_ERRORS, $unavailable_timeslots);
         try {
             $get_bookings = $this->database->database_handle->prepare(
                 "SELECT * FROM bookings WHERE booking_date >= NOW() AND username = :username"
