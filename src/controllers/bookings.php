@@ -89,6 +89,13 @@ class OrdersController
             redirect("account/login", AccountError::USER_LOGGED_OUT, AccountError::USER_LOGGED_OUT, "bookings/orders");
         }
 
+        if (! isset($_REQUEST["error"])) {
+            $bookings = $this->booking->getBookings($this->session->username);
+            if (isset($bookings->error)) {
+                redirect("bookings/orders", $bookings->message, $bookings->message);
+            }
+        }
+
         require "views/orders.php";
         exit();
     }

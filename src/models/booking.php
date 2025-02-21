@@ -160,7 +160,27 @@ class Booking
         } catch (PDOException $exception) {
             return $operation->createMessage(CrudOperation::DATABASE_ERROR . "Failed to fetch unavailable timeslots.", CrudOperation::DATABASE_ERROR);
         }
+    }
+
+    public function getBookings($username) {
+        $operation = new CrudOperation();
 
         return $operation->createMessage("Fetched unavailable timeslots successfully.", CrudOperation::NO_ERRORS, $unavailable_timeslots);
+        try {
+            $get_bookings = $this->database->database_handle->prepare(
+                "SELECT * FROM bookings WHERE booking_date >= NOW() AND username = :username"
+            );
+            $gotten_bookings = $get_bookings->execute([
+                "username" => $username
+            ]);
+            if ($gotten_bookings) {
+                $bookings = $get_bookings->fetchAll();
+                return $operation->createMessage("Successfully obtained bookings.", CrudOperation::NO_ERRORS, $bookings);
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+        }
     }
 }
