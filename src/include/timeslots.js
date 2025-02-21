@@ -30,9 +30,6 @@ function disableUnavailableTimeslots(data) {
         // Get the unix time of both the booking date and timeslot put together
         let bookingAndTimeslotDateTime = Date.parse(`${bookingDateInput.val()}T${this.value}Z`);
         
-        console.log(bookingAndTimeslotDateTime);
-        console.log(Date.now());
-
         if (data.hasOwnProperty(this.value)) {
             number_of_tables_booked = data[this.value];
             this.setAttribute("disabled", "");

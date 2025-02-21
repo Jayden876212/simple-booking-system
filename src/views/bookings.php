@@ -22,7 +22,6 @@
         ): ?>
             <option id="timeslotPlaceholder" selected value="">Please choose a timeslot</option>
             <?php foreach ($timeslots->result as $timeslot): ?>
-                <?=var_dump($timeslot)?>
                 <?php
                     $timeslot_start_time = (new DateTime(
                         $timeslot["timeslot_start_time"])

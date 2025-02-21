@@ -58,7 +58,6 @@ class TimeslotController
     public function handleRequest() {
         $chosen_booking_date = $_REQUEST["booking_date"] ?? FALSE;
         if ($chosen_booking_date) {
-            // echo $chosen_booking_date;
             $booking = new Booking($this->database, $this->session);
             $unavailable_timeslots = $booking->getUnavailableTimeslots($chosen_booking_date);
             if (! isset($unavailable_timeslots->error) && isset($unavailable_timeslots->result)) {
