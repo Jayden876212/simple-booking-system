@@ -75,11 +75,13 @@ class OrdersController
     private $session;
     private $database;
     private $booking;
+    private $item;
 
     public function __construct(Session $session, Database $database) {
         $this->session = $session;
         $this->database = $database;
         $this->booking = new Booking($this->database, $this->session);
+        $this->item = new Item($this->database);
     }
 
     public function handleRequest() {
@@ -93,6 +95,10 @@ class OrdersController
             $bookings = $this->booking->getBookings($this->session->username);
             if (isset($bookings->error)) {
                 redirect("bookings/orders", $bookings->message, $bookings->message);
+            }
+            $items = $this->item->getItems();
+            if (isset($items->error)) {
+                redirect("bookings/orders", $items->message, $items->message);
             }
         }
 

@@ -27,6 +27,7 @@ class CrudOperation
 require_once "models/session.php";
 require_once "models/database.php";
 require_once "models/account.php";
+require_once "models/order.php";
 
 require_once "connect.php";
 
