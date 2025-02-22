@@ -100,6 +100,26 @@ class OrdersController
             if (isset($items->error)) {
                 redirect("bookings/orders", $items->message, $items->message);
             }
+
+            if (isset($_POST["booking"])) {
+                $booking_id = $_POST["booking"];
+            }
+
+            $items_and_quantities = [];
+            foreach ($items->result as $item) {
+                $item_quantity = $_POST["quantity_of_" . $item["item_name"]] ?? 0;
+                if ($item_quantity > 0) {
+                    $items_and_quantities[$item["item_name"]] = $item_quantity;
+                }
+            }
+            if ($items_and_quantities and isset($booking_id)) {
+                $order = new Order($this->database, $this->session);
+                $ordered_items = $order->orderItems($booking_id, $items_and_quantities);
+                if (isset($ordered_items->error)) {
+                    redirect("bookings/orders", $ordered_items->message, $ordered_items->message);
+                }
+                redirect("bookings/orders", $ordered_items->message);
+            }
         }
 
         require "views/orders.php";
