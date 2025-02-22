@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 21, 2025 at 11:57 PM
+-- Generation Time: Feb 22, 2025 at 01:25 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -91,7 +91,33 @@ INSERT INTO `bookings` (`booking_id`, `timeslot_start_time`, `username`, `bookin
 (52, '12:00:00', 'jayden', '2025-02-21'),
 (53, '12:00:00', 'jayden', '2025-02-21'),
 (54, '12:00:00', 'jayden', '2025-02-21'),
-(55, '13:00:00', 'jayden', '2025-02-21');
+(55, '13:00:00', 'jayden', '2025-02-21'),
+(56, '09:00:00', 'jayden', '2025-02-22'),
+(57, '09:00:00', 'jayden', '2025-02-22'),
+(58, '09:00:00', 'jayden', '2025-02-22'),
+(59, '09:00:00', 'jayden', '2025-02-22'),
+(60, '10:00:00', 'jayden', '2025-02-22'),
+(61, '11:00:00', 'jayden', '2025-02-22'),
+(62, '12:00:00', 'jayden', '2025-02-22'),
+(63, '13:00:00', 'jayden', '2025-02-22'),
+(64, '14:00:00', 'jayden', '2025-02-22'),
+(65, '09:00:00', 'jayden', '2025-02-22'),
+(66, '09:00:00', 'jayden', '2025-02-22'),
+(67, '09:00:00', 'jayden', '2025-02-22'),
+(68, '09:00:00', 'jayden', '2025-02-22'),
+(69, '09:00:00', 'jayden', '2025-02-22'),
+(70, '09:00:00', 'jayden', '2025-02-22'),
+(71, '10:00:00', 'jayden', '2025-02-22'),
+(72, '10:00:00', 'jayden', '2025-02-22'),
+(73, '10:00:00', 'jayden', '2025-02-22'),
+(74, '10:00:00', 'jayden', '2025-02-22'),
+(75, '10:00:00', 'jayden', '2025-02-22'),
+(76, '10:00:00', 'jayden', '2025-02-22'),
+(77, '10:00:00', 'jayden', '2025-02-22'),
+(78, '10:00:00', 'jayden', '2025-02-22'),
+(79, '10:00:00', 'jayden', '2025-02-22'),
+(80, '09:00:00', 'jayden', '2025-02-23'),
+(81, '11:00:00', 'jayden', '2025-02-22');
 
 -- --------------------------------------------------------
 
@@ -123,7 +149,7 @@ INSERT INTO `items` (`item_name`, `description`, `price`) VALUES
 CREATE TABLE `item_orders` (
   `item_order_id` int(11) NOT NULL,
   `item_name` varchar(20) NOT NULL,
-  `booking_id` int(11) NOT NULL,
+  `order_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -205,8 +231,8 @@ ALTER TABLE `items`
 --
 ALTER TABLE `item_orders`
   ADD PRIMARY KEY (`item_order_id`),
-  ADD KEY `on_booking` (`booking_id`),
-  ADD KEY `on_item` (`item_name`);
+  ADD KEY `on_item` (`item_name`),
+  ADD KEY `on_order` (`order_id`);
 
 --
 -- Indexes for table `orders`
@@ -235,7 +261,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 
 --
 -- AUTO_INCREMENT for table `item_orders`
@@ -264,8 +290,8 @@ ALTER TABLE `bookings`
 -- Constraints for table `item_orders`
 --
 ALTER TABLE `item_orders`
-  ADD CONSTRAINT `on_booking` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `on_item` FOREIGN KEY (`item_name`) REFERENCES `items` (`item_name`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `on_item` FOREIGN KEY (`item_name`) REFERENCES `items` (`item_name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `on_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orders`
