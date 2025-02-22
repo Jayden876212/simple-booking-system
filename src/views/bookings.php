@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button type="submit" name="create_booking" id="createBooking" value="true" class="btn btn-success">Book</button>
+                    <button type="submit" name="create_booking" id="createBooking" value="true" class="btn btn-success float-end">Book</button>
                 </div>
             </form>
         </div>
@@ -93,8 +93,18 @@
                     <?php if (isset($bookings)): ?>
                         <?php if (is_object($bookings)): ?>
                             <?php foreach ($bookings->result as $booking): ?>
-                                <li class="list-group-item">
-                                    Booking #<?=$booking["booking_id"]?> - <?=$booking["timeslot_start_time"]?> <?=$booking["booking_date"]?>
+                                <li class="list-group-item d-flex flex-row justify-content-between">
+                                    <p>
+                                        Booking #<?=$booking["booking_id"]?> - <?=$booking["timeslot_start_time"]?> <?=$booking["booking_date"]?>
+                                    </p>
+                                    <div class="d-flex flex-row gap-3">
+                                        <button class="btn btn-danger">
+                                            Cancel
+                                        </button>
+                                        <button class="btn btn-primary">
+                                            View
+                                        </button>
+                                    </div>
                                 </li>
                             <?php endforeach ?>
                         <?php endif ?>
