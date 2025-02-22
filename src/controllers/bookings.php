@@ -132,3 +132,19 @@ class OrdersController
         exit();
     }
 }
+
+class BookingCancellationController
+{
+    private $session;
+    private $database;
+    private $booking;
+
+    public function __construct(Session $session, Database $database) {
+        $this->session = $session;
+        $this->database = $database;
+        $this->booking = new Booking($this->database, $this->session);
+    }
+
+    public function handleRequest() {
+    }
+}

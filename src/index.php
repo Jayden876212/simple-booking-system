@@ -45,6 +45,10 @@ switch (strtok($request, "?")) {
         $controller = new TimeslotController($database, $session);
         $controller->handleRequest();
         break;
+    case "/bookings/cancel":
+        $controller = new BookingCancellationController($session, $database);
+        $controller->handleRequest();
+        break;
     case "/bookings/orders":
         $controller = new OrdersController($session, $database);
         $controller->handleRequest();
