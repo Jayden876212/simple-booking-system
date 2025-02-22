@@ -18,6 +18,10 @@
         </script>
 
         <!-- Bespoke Scripts -->
-        <script src="include/timeslots.js"></script>
+        <?php if (PAGE_TITLE == "Bookings"): ?>
+            <script src="<?=HOST?><?=WORKING_DIRECTORY?>/include/timeslots.js"></script>
+        <?php elseif (PAGE_TITLE == "Orders"): ?>
+            <script src="<?=HOST?><?=WORKING_DIRECTORY?>/include/orders.js"></script>
+        <?php endif ?>
     </body>
 </html>
