@@ -36,24 +36,26 @@
                     <h3>Total</h3>
                 </div>
             </div>
-            <?php if (is_object($items)): ?>
-                <?php if (isset($items->result) && (! $items->error)): ?>
-                    <?php foreach ($items->result as $item): ?>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <p id="<?=$item["item_name"]?>"><?=$item["item_name"]?></p>
+            <?php if (isset($items)): ?>
+                <?php if (is_object($items)): ?>
+                    <?php if (isset($items->result) && (! $items->error)): ?>
+                        <?php foreach ($items->result as $item): ?>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <p id="<?=$item["item_name"]?>"><?=$item["item_name"]?></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <p id="price_of_<?=$item["item_name"]?>"><?=$item["price"]?></p>
+                                </div>
+                                <div class="col-md-3">
+                                    <input type="number" id="quantity_of_<?=$item["item_name"]?>" name="quantity_of_<?=$item["item_name"]?>" value="0">
+                                </div>
+                                <div class="col-md-3">
+                                    <p id="total_of_<?=$item["item_name"]?>">0</p>
+                                </div>
                             </div>
-                            <div class="col-md-3">
-                                <p id="price_of_<?=$item["item_name"]?>" name="price_of_<?=$item["item_name"]?>"><?=$item["price"]?></p>
-                            </div>
-                            <div class="col-md-3">
-                                <input type="number" id="quantity_of_<?=$item["item_name"]?>" name="quantity_of_<?=$item["item_name"]?>" value="0">
-                            </div>
-                            <div class="col-md-3">
-                                <p>0</p>
-                            </div>
-                        </div>
-                    <?php endforeach ?>
+                        <?php endforeach ?>
+                    <?php endif ?>
                 <?php endif ?>
             <?php endif ?>
         </section>
