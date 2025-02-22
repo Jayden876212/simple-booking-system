@@ -167,7 +167,7 @@ class Booking
 
         try {
             $get_bookings = $this->database->database_handle->prepare(
-                "SELECT booking_id, timeslot_start_time, booking_date FROM bookings WHERE booking_date >= NOW() AND username = :username"
+                "SELECT booking_id, timeslot_start_time, booking_date FROM bookings WHERE booking_date >= CURDATE() AND username = :username"
             );
             $gotten_bookings = $get_bookings->execute([
                 "username" => $username
