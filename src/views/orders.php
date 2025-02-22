@@ -36,35 +36,41 @@
                     <h3>Total</h3>
                 </div>
             </div>
-            <?php if (isset($items)): ?>
-                <?php if (is_object($items)): ?>
-                    <?php if (isset($items->result) && (! $items->error)): ?>
-                        <?php foreach ($items->result as $item): ?>
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <p id="<?=$item["item_name"]?>"><?=$item["item_name"]?></p>
+            <section id="itemsList">
+                <?php if (isset($items)): ?>
+                    <?php if (is_object($items)): ?>
+                        <?php if (isset($items->result) && (! $items->error)): ?>
+                            <?php foreach ($items->result as $item): ?>
+                                <div id="<?=$item["item_name"]?>" class="row item-product">
+                                    <div class="col-md-3">
+                                        <p class="item-name" id="name_of_<?=$item["item_name"]?>"><?=$item["item_name"]?></p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p>
+                                            £<i class="item-price" id="price_of_<?=$item["item_name"]?>"><?=$item["price"]?></i>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <input class="item-quantity" type="number" id="quantity_of_<?=$item["item_name"]?>" name="quantity_of_<?=$item["item_name"]?>" value="0" onchange="
+                                            updateItems()
+                                        ">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <p>£<i class="item-total" id="total_of_<?=$item["item_name"]?>">0</i></p>
+                                    </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <p id="price_of_<?=$item["item_name"]?>">£<?=$item["price"]?></p>
-                                </div>
-                                <div class="col-md-3">
-                                    <input type="number" id="quantity_of_<?=$item["item_name"]?>" name="quantity_of_<?=$item["item_name"]?>" value="0">
-                                </div>
-                                <div class="col-md-3">
-                                    <p>£<i id="total_of_<?=$item["item_name"]?>">0</i></p>
-                                </div>
-                            </div>
-                        <?php endforeach ?>
+                            <?php endforeach ?>
+                        <?php endif ?>
                     <?php endif ?>
                 <?php endif ?>
-            <?php endif ?>
+            </section>
             <div class="row">
                 <div class="col-md-12">
                     <h3>Summary</h3>
                     <p>
                         <b>Overall Total: </b> £<i id="overallTotalPrice">0</i>
                         <br>
-                        <b>Overall Quantity: </b> £<i id="overallQuantity">0</i>
+                        <b>Overall Quantity: </b> <i id="overallQuantity">0</i>
                     </p>
                 </div>
             </div>
