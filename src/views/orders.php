@@ -45,19 +45,29 @@
                                     <p id="<?=$item["item_name"]?>"><?=$item["item_name"]?></p>
                                 </div>
                                 <div class="col-md-3">
-                                    <p id="price_of_<?=$item["item_name"]?>"><?=$item["price"]?></p>
+                                    <p id="price_of_<?=$item["item_name"]?>">£<?=$item["price"]?></p>
                                 </div>
                                 <div class="col-md-3">
                                     <input type="number" id="quantity_of_<?=$item["item_name"]?>" name="quantity_of_<?=$item["item_name"]?>" value="0">
                                 </div>
                                 <div class="col-md-3">
-                                    <p id="total_of_<?=$item["item_name"]?>">0</p>
+                                    <p>£<i id="total_of_<?=$item["item_name"]?>">0</i></p>
                                 </div>
                             </div>
                         <?php endforeach ?>
                     <?php endif ?>
                 <?php endif ?>
             <?php endif ?>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3>Summary</h3>
+                    <p>
+                        <b>Overall Total: </b> £<i id="overallTotalPrice">0</i>
+                        <br>
+                        <b>Overall Quantity: </b> £<i id="overallQuantity">0</i>
+                    </p>
+                </div>
+            </div>
         </section>
 
         <h2>Finished ordering?</h2>
