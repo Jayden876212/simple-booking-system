@@ -21,40 +21,41 @@ class OrdersController
             redirect("account/login", AccountError::USER_LOGGED_OUT, AccountError::USER_LOGGED_OUT, "bookings/orders");
         }
 
+        $bookings = $this->booking->getBookings($this->session->username);
+        $items = $this->item->getItems();
         if (! isset($_REQUEST["error"])) {
-            $bookings = $this->booking->getBookings($this->session->username);
             if (isset($bookings->error)) {
                 redirect("bookings", $bookings->message, $bookings->message);
             }
-            $items = $this->item->getItems();
             if (isset($items->error)) {
                 redirect("bookings", $items->message, $items->message);
             }
         }
 
         $booking_id = $_POST["booking"] ?? FALSE;
+        $items_and_quantities =  self::sortItems($items);
         $submit_button_pressed = $_POST["order_items"] ?? FALSE;
 
-        if ($booking_id AND $submit_button_pressed) {
-            $items_and_quantities = [];
-            foreach ($items->result as $item) {
-                $item_quantity = $_POST["quantity_of_" . $item["item_name"]] ?? 0;
-                if ($item_quantity > 0) {
-                    $items_and_quantities[$item["item_name"]] = $item_quantity;
-                }
+        if ($submit_button_pressed) {
+            $order = new Order($this->database, $this->session);
+            $ordered_items = $order->orderItems($booking_id, $items_and_quantities);
+            if (isset($ordered_items->error)) {
+                redirect("bookings/orders", $ordered_items->message, $ordered_items->message);
             }
-
-            if ($items_and_quantities) {
-                $order = new Order($this->database, $this->session);
-                $ordered_items = $order->orderItems($booking_id, $items_and_quantities);
-                if (isset($ordered_items->error)) {
-                    redirect("bookings/orders", $ordered_items->message, $ordered_items->message);
-                }
-                redirect("bookings/orders", $ordered_items->message);
-            }
+            redirect("bookings/orders", $ordered_items->message);
         }
 
         require "views/orders.php";
         exit();
+    }
+
+    private function sortItems($items) {
+        $items_and_quantities = [];
+        foreach ($items->result as $item) {
+            $item_quantity = $_POST["quantity_of_" . $item["item_name"]] ?? NULL;
+            $items_and_quantities[$item["item_name"]] = $item_quantity;
+        }
+
+        return $items_and_quantities;
     }
 }

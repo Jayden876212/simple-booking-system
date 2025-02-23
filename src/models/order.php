@@ -1,5 +1,15 @@
 <?php
 
+enum OrderError: string {
+    case BOOKING_ID_EMPTY = "You must select a booking ID.";
+    case AT_LEAST_ONE_ITEM = "You must purchase at least one item.";
+    case BOOKING_ID_NOT_EXIST = "A booking with that ID does not exist.";
+    case ITEM_NAMES_NOT_EXIST = "A booking with that ID does not exist.";
+    case USER_NO_PERMISSION = "The selected booking belongs to another user (booking username must be the same as the one in the session).";
+    case ITEM_QUANTITY_ZERO_OR_LESS = "The quantity of the selected items must be at least 1.";
+    case BOOKING_NOT_IN_TIMESLOT = "Your order must be done at the time between your timeslot's start time and the next timeslot's start time.";
+}
+
 class Order
 {
     private $database;
