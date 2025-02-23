@@ -65,7 +65,20 @@
                                                 <?php break;
                                         endswitch ?>
                                     <?php else: ?>
-                                        <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
+                                        <?php
+                                            $timeslot_status = TimeslotStatus::AVAILABLE;
+                                            if (strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z") < time()) {
+                                                $timeslot_status = TimeslotStatus::IN_THE_PAST;
+                                            }
+                                        ?>
+                                        <?php switch ($timeslot_status):
+                                            case TimeslotStatus::IN_THE_PAST: ?>
+                                                <option value="<?=$timeslot["timeslot_start_time"]?>" disabled><?=$timeslot_start_time?></option>
+                                                <?php break;
+                                            case TimeslotStatus::AVAILABLE: ?>
+                                                <option value="<?=$timeslot["timeslot_start_time"]?>"><?=$timeslot_start_time?></option>
+                                                <?php break;
+                                        endswitch ?>
                                     <?php endif ?>
                                 <?php endforeach ?>
                             <?php elseif (isset($timeslots->error) or isset($unavailable_timeslots->error)): ?>
