@@ -6,6 +6,7 @@ require_once "models/booking.php";
 require_once "controllers/accounts.php";
 require_once "controllers/home.php";
 require_once "controllers/bookings.php";
+require_once "controllers/orders.php";
 
 const HOST = "http://localhost";
 const WORKING_DIRECTORY = "/simple-booking-system/src";
