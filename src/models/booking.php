@@ -185,15 +185,16 @@ class Booking
         }
     }
     
-    public function cancelBooking($booking_id) {
+    public function cancelBooking($booking_id, $username) {
         $operation = new CrudOperation();
 
         try {
             $cancel_booking = $this->database->database_handle->prepare(
-                "DELETE FROM bookings WHERE booking_id = :booking_id"
+                "DELETE FROM bookings WHERE booking_id = :booking_id AND username = :username"
             );
             $cancelled_booking = $cancel_booking->execute([
-                "booking_id" => $booking_id
+                "booking_id" => $booking_id,
+                "username" => $username
             ]);
             if ($cancelled_booking) {
                 return $operation->createMessage("Successfully cancelled booking.");
