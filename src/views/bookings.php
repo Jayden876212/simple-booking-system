@@ -116,9 +116,9 @@
                                                 <button class="btn btn-danger">
                                                     Cancel
                                                 </button>
-                                            <a href="">
+                                            <a href="<?=HOST?><?=WORKING_DIRECTORY?>/bookings/orders?booking_id=<?=$booking["booking_id"]?>">
                                                 <button class="btn btn-primary">
-                                                    View
+                                                    Order
                                                 </button>
                                             </a>
                                         </div>

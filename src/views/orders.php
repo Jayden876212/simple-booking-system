@@ -1,6 +1,8 @@
 <?php
     const PAGE_TITLE = "Orders";
     include_once "include/base.php";
+
+    $booking_id = $_REQUEST["booking_id"] ?? FALSE;
 ?>
 
 <h1><?=PAGE_TITLE?></h1>
@@ -11,9 +13,24 @@
             <select id="booking" name="booking">
                 <?php if (is_object($bookings)): ?>
                     <?php if (isset($bookings->result) && (! $bookings->error)): ?>
-                        <option value="" selected id="bookingOptionPlaceholder">Please select a booking</option>
+                        <option
+                            value="" 
+                            id="bookingOptionPlaceholder"
+                            <?php if (! $booking_id): ?>
+                                selected
+                            <?php endif?>
+                        >
+                            Please select a booking
+                        </option>
                         <?php foreach ($bookings->result as $booking): ?>
-                            <option value="<?=$booking["booking_id"]?>">Booking #<?=$booking["booking_id"]?> (<?=$booking["booking_date"]?> <?=$booking["timeslot_start_time"]?>)</option>
+                            <option
+                                value="<?=$booking["booking_id"]?>"
+                                <?php if ($booking["booking_id"] == $booking_id): ?>
+                                    selected
+                                <?php endif ?>
+                            >
+                                Booking #<?=$booking["booking_id"]?> (<?=$booking["booking_date"]?> <?=$booking["timeslot_start_time"]?>)
+                            </option>
                         <?php endforeach ?>
                     <?php endif ?>
                 <?php endif ?>
