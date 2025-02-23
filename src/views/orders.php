@@ -115,20 +115,27 @@
                 </section>
 
                 <div class="card-footer">
-                    <section class="row">
-                        <h4>Summary</h4>
-                        <p>
-                            <b>Overall Total: </b> £<i id="overallTotalPrice">0</i>
-                            <br>
-                            <b>Overall Quantity: </b> <i id="overallQuantity">0</i>
-                        </p>
-                    </section>
-                    <section class="d-flex flex-row justify-content-between">
-                        <h3 class="fs-5">
-                            <label for="orderItems">Finished ordering?</label>
-                        </h2>
-                        <button id="orderItems" name="order_items" type="submit" class="btn btn-success" value="true">Order Items</button>
-                    </section>
+                    <div class="row">
+                        <section class="alert alert-info">
+                            <h4>Summary</h4>
+                            <ul class="list-group bg-info bg-transparent">
+                                <li class="list-group-item bg-transparent text-info-emphasis">
+                                    <b>Overall Total: </b> £<i id="overallTotalPrice">0</i>
+                                </li>
+                                <li class="list-group-item bg-transparent text-info-emphasis">
+                                    <b>Overall Quantity: </b> <i id="overallQuantity">0</i>
+                                </li>
+                            </ul>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="d-flex flex-row justify-content-between">
+                            <h3 class="fs-5">
+                                <label for="orderItems">Finished ordering?</label>
+                            </h2>
+                            <button id="orderItems" name="order_items" type="submit" class="btn btn-success" value="true">Order Items</button>
+                        </section>
+                    </div>
                 </div>
             </form>
         </div>
