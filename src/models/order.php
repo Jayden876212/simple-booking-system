@@ -124,6 +124,32 @@ class Order
             return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
         }
     }
+
+    public function getOrders($username) {
+        $operation = new CrudOperation();
+
+        try {
+            $get_orders = $this->database->database_handle->prepare(
+                "SELECT orders.order_id, orders.datetime_ordered, item_orders.item_name, SUM(item_orders.quantity)
+                FROM orders
+                JOIN item_orders ON orders.order_id = item_orders.order_id
+                JOIN bookings ON bookings.booking_id = orders.booking_id
+                WHERE bookings.username = :username
+                GROUP BY item_orders.item_name"
+            );
+            $gotten_orders = $get_orders->execute([
+                "username" => $username
+            ]);
+            if ($gotten_orders) {
+                $orders = $get_orders->fetchAll();
+                return $operation->createMessage("Successfully obtained orders.", CrudOperation::NO_ERRORS, $orders);
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage($exception, CrudOperation::DATABASE_ERROR);
+        }
+    }
 }
 
 

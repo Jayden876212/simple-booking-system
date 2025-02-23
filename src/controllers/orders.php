@@ -6,12 +6,14 @@ class OrdersController
     private $database;
     private $booking;
     private $item;
+    private $order;
 
     public function __construct(Session $session, Database $database) {
         $this->session = $session;
         $this->database = $database;
         $this->booking = new Booking($this->database, $this->session);
         $this->item = new Item($this->database);
+        $this->order = new Order($this->database, $this->session);
     }
 
     public function handleRequest() {
@@ -23,12 +25,16 @@ class OrdersController
 
         $bookings = $this->booking->getBookings($this->session->username);
         $items = $this->item->getItems();
+        $orders = $this->order->getOrders($this->session->username);
         if (! isset($_REQUEST["error"])) {
             if (isset($bookings->error)) {
                 redirect("bookings", $bookings->message, $bookings->message);
             }
             if (isset($items->error)) {
                 redirect("bookings", $items->message, $items->message);
+            }
+            if (isset($orders->error)) {
+                redirect("bookings", $orders->message, $orders->message);
             }
         }
 

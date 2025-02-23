@@ -8,7 +8,7 @@
 <h1 class="mx-auto text-center"><?=PAGE_TITLE?></h1>
 <article class="container-fluid">
     <div class="row">
-        <section class="col-md-5 mx-auto">
+        <section class="col-md-5 mx-auto mb-4">
             <form class="card" action="" method="POST">
                 <div class="card-header d-flex flex-row justify-content-between">
                     <h2>Order Items</h2>
@@ -149,7 +149,21 @@
                     </div>
                 </div>
             </form>
-        </div>
+        </section>
+    </div>
+    <div class="row">
+        <section class="col-md-5 mx-auto mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h2>View Your Orders</h2>
+                </div>
+                <div class="card-body">
+                    <pre>
+                        <?=print_r($orders->result)?>
+                    </pre>
+                </div>
+            </div>
+        </section>
     </div>
 </article>
 
