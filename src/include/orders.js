@@ -37,4 +37,5 @@ function updateOverallTotalPricesAndQuantities(items) {
 
     $("#overallTotalPrice").text(overallTotalPrice);
     $("#overallQuantity").text(overallQuantity);
+    $("#overallQuantityCart").text(overallQuantity);
 }

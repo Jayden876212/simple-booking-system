@@ -10,8 +10,17 @@
     <div class="row">
         <section class="col-md-5 mx-auto">
             <form class="card" action="" method="POST">
-                <div class="card-header">
+                <div class="card-header d-flex flex-row justify-content-between">
                     <h2>Order Items</h2>
+                    <div class="p-1">
+                        <button type="button" class="btn btn-warning position-relative">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-success">
+                                <i id="overallQuantityCart">0</i>
+                                <span class="visually-hidden">unread messages</span>
+                            </span>
+                        </button>
+                    </div>
                 </div>
                 <section class="list-group list-group-flush">
                     <div class="list-group-item">
@@ -117,7 +126,9 @@
                 <div class="card-footer">
                     <div class="row p-3">
                         <section class="alert alert-info">
-                            <h4>Summary</h4>
+                            <h4>
+                                Summary
+                            </h4>
                             <ul class="list-group bg-info bg-transparent">
                                 <li class="list-group-item bg-transparent text-info-emphasis">
                                     <b>Overall Total: </b> £<i id="overallTotalPrice">0</i>
