@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2025 at 01:25 AM
+-- Generation Time: Feb 24, 2025 at 12:31 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -39,85 +39,8 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`booking_id`, `timeslot_start_time`, `username`, `booking_date`) VALUES
-(1, '12:00:00', 'jayden', '2025-02-12'),
-(2, '15:00:00', 'jayden', '2025-02-14'),
-(3, '09:00:00', 'jayden', '2025-02-12'),
-(4, '12:00:00', 'jayden', '2025-02-12'),
-(6, '09:00:00', 'jayden', '2025-02-06'),
-(7, '12:00:00', 'jayden', '2025-02-06'),
-(8, '13:00:00', 'jayden', '2025-02-06'),
-(9, '13:00:00', 'jayden', '2025-02-06'),
-(10, '14:00:00', 'jayden', '2025-02-21'),
-(12, '12:00:00', 'jayden', '2025-02-21'),
-(13, '13:00:00', 'jayden', '2025-02-21'),
-(14, '13:00:00', 'jayden', '2025-02-21'),
-(15, '12:00:00', 'jayden', '2025-02-22'),
-(16, '09:00:00', 'jayden', '2025-02-21'),
-(17, '09:00:00', 'jayden', '2025-02-21'),
-(18, '10:00:00', 'jayden', '2025-02-21'),
-(19, '09:00:00', 'jayden', '2025-02-21'),
-(20, '09:00:00', 'jayden', '2025-02-21'),
-(21, '09:00:00', 'jayden', '2025-02-21'),
-(22, '09:00:00', 'jayden', '2025-02-21'),
-(23, '09:00:00', 'jayden', '2025-02-21'),
-(24, '09:00:00', 'jayden', '2025-02-21'),
-(25, '09:00:00', 'jayden', '2025-02-21'),
-(26, '09:00:00', 'jayden', '2025-02-21'),
-(27, '10:00:00', 'jayden', '2025-02-21'),
-(28, '10:00:00', 'jayden', '2025-02-21'),
-(29, '10:00:00', 'jayden', '2025-02-21'),
-(30, '10:00:00', 'jayden', '2025-02-21'),
-(31, '10:00:00', 'jayden', '2025-02-21'),
-(32, '10:00:00', 'jayden', '2025-02-21'),
-(33, '10:00:00', 'jayden', '2025-02-21'),
-(34, '10:00:00', 'jayden', '2025-02-21'),
-(35, '10:00:00', 'jayden', '2025-02-21'),
-(36, '11:00:00', 'jayden', '2025-02-21'),
-(37, '11:00:00', 'jayden', '2025-02-21'),
-(38, '11:00:00', 'jayden', '2025-02-21'),
-(39, '11:00:00', 'jayden', '2025-02-21'),
-(40, '11:00:00', 'jayden', '2025-02-21'),
-(41, '11:00:00', 'jayden', '2025-02-21'),
-(42, '11:00:00', 'jayden', '2025-02-21'),
-(43, '11:00:00', 'jayden', '2025-02-21'),
-(44, '11:00:00', 'jayden', '2025-02-21'),
-(45, '11:00:00', 'jayden', '2025-02-21'),
-(46, '12:00:00', 'jayden', '2025-02-21'),
-(47, '12:00:00', 'jayden', '2025-02-21'),
-(48, '12:00:00', 'jayden', '2025-02-21'),
-(49, '12:00:00', 'jayden', '2025-02-21'),
-(50, '12:00:00', 'jayden', '2025-02-21'),
-(51, '12:00:00', 'jayden', '2025-02-21'),
-(52, '12:00:00', 'jayden', '2025-02-21'),
-(53, '12:00:00', 'jayden', '2025-02-21'),
-(54, '12:00:00', 'jayden', '2025-02-21'),
-(55, '13:00:00', 'jayden', '2025-02-21'),
-(56, '09:00:00', 'jayden', '2025-02-22'),
-(57, '09:00:00', 'jayden', '2025-02-22'),
-(58, '09:00:00', 'jayden', '2025-02-22'),
-(59, '09:00:00', 'jayden', '2025-02-22'),
-(60, '10:00:00', 'jayden', '2025-02-22'),
-(61, '11:00:00', 'jayden', '2025-02-22'),
-(62, '12:00:00', 'jayden', '2025-02-22'),
-(63, '13:00:00', 'jayden', '2025-02-22'),
-(64, '14:00:00', 'jayden', '2025-02-22'),
-(65, '09:00:00', 'jayden', '2025-02-22'),
-(66, '09:00:00', 'jayden', '2025-02-22'),
-(67, '09:00:00', 'jayden', '2025-02-22'),
-(68, '09:00:00', 'jayden', '2025-02-22'),
-(69, '09:00:00', 'jayden', '2025-02-22'),
-(70, '09:00:00', 'jayden', '2025-02-22'),
-(71, '10:00:00', 'jayden', '2025-02-22'),
-(72, '10:00:00', 'jayden', '2025-02-22'),
-(73, '10:00:00', 'jayden', '2025-02-22'),
-(74, '10:00:00', 'jayden', '2025-02-22'),
-(75, '10:00:00', 'jayden', '2025-02-22'),
-(76, '10:00:00', 'jayden', '2025-02-22'),
-(77, '10:00:00', 'jayden', '2025-02-22'),
-(78, '10:00:00', 'jayden', '2025-02-22'),
-(79, '10:00:00', 'jayden', '2025-02-22'),
-(80, '09:00:00', 'jayden', '2025-02-23'),
-(81, '11:00:00', 'jayden', '2025-02-22');
+(102, '09:00:00', 'jayden', '2025-02-24'),
+(103, '09:00:00', 'bob', '2025-02-24');
 
 -- --------------------------------------------------------
 
@@ -153,6 +76,39 @@ CREATE TABLE `item_orders` (
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `item_orders`
+--
+
+INSERT INTO `item_orders` (`item_order_id`, `item_name`, `order_id`, `quantity`) VALUES
+(54, 'Hamburger', 27, 0),
+(55, 'Pasta', 27, 0),
+(56, 'Rice', 27, 0),
+(57, 'Hamburger', 33, 1),
+(58, 'Pasta', 33, 0),
+(59, 'Rice', 33, 0),
+(60, 'Hamburger', 34, 0),
+(61, 'Pasta', 34, 0),
+(62, 'Rice', 34, 0),
+(63, 'Hamburger', 35, 1),
+(64, 'Pasta', 35, 0),
+(65, 'Rice', 35, 0),
+(66, 'Hamburger', 36, 1),
+(67, 'Pasta', 36, 0),
+(68, 'Rice', 36, 0),
+(69, 'Hamburger', 37, 0),
+(70, 'Pasta', 37, 2),
+(71, 'Rice', 37, 1),
+(72, 'Hamburger', 38, 0),
+(73, 'Pasta', 38, 0),
+(74, 'Rice', 38, 1),
+(75, 'Hamburger', 39, 1),
+(76, 'Pasta', 39, 0),
+(77, 'Rice', 39, 0),
+(78, 'Hamburger', 40, 1),
+(79, 'Hamburger', 41, 2),
+(80, 'Pasta', 41, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -164,6 +120,22 @@ CREATE TABLE `orders` (
   `booking_id` int(11) NOT NULL,
   `datetime_ordered` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `booking_id`, `datetime_ordered`) VALUES
+(27, 102, '2025-02-23 20:12:16'),
+(33, 102, '2025-02-23 20:15:22'),
+(34, 102, '2025-02-23 21:06:54'),
+(35, 102, '2025-02-23 21:26:19'),
+(36, 102, '2025-02-23 21:27:10'),
+(37, 102, '2025-02-23 22:21:44'),
+(38, 102, '2025-02-23 22:21:51'),
+(39, 102, '2025-02-23 22:50:27'),
+(40, 102, '2025-02-23 22:51:56'),
+(41, 102, '2025-02-23 22:53:37');
 
 -- --------------------------------------------------------
 
@@ -206,7 +178,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`username`, `password`) VALUES
-('jayden', '$2y$10$RmRnzyrJtaT80.GevTqtq.PBrq/8/b41wgLBs0SRT0EserF0Uh4OK');
+('bob', '$2y$10$OhpJsj6QVFsYAH1w2G7lxO21eqM1jBKbmouYi8O114ieL4cWiA4om'),
+('jayden', '$2y$10$rujxjYWURgXaMVsy740PC.zTVir1ubbQumzmLVtxL73gAmJq4hu3C');
 
 --
 -- Indexes for dumped tables
@@ -261,19 +234,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
 
 --
 -- AUTO_INCREMENT for table `item_orders`
 --
 ALTER TABLE `item_orders`
-  MODIFY `item_order_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `item_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Constraints for dumped tables
