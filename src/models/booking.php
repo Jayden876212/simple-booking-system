@@ -80,7 +80,9 @@ class Booking
             return $operation->createMessage(AccountError::USER_LOGGED_OUT, AccountError::USER_LOGGED_OUT);
         }
 
-        $existing_timeslot = (new Timeslot($this->database))->getTimeslot($timeslot_start_time);
+        $timeslot = new Timeslot($this->database);
+
+        $existing_timeslot = $timeslot->getTimeslot($timeslot_start_time);
         if (isset($existing_timeslot->error)) {
             return $operation->createMessage($existing_timeslot->error, $existing_timeslot->error);
         }
