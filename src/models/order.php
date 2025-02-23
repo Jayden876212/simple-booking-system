@@ -4,7 +4,7 @@ enum OrderError: string {
     case BOOKING_ID_EMPTY = "You must select a booking ID.";
     case AT_LEAST_ONE_ITEM = "You must purchase at least one item.";
     case BOOKING_ID_NOT_EXIST = "A booking with that ID does not exist.";
-    case ITEM_NAMES_NOT_EXIST = "A booking with that ID does not exist.";
+    case ITEM_NAMES_NOT_EXIST = "An item with that name does not exist.";
     case USER_NO_PERMISSION = "The selected booking belongs to another user (booking username must be the same as the one in the session).";
     case ITEM_QUANTITY_ZERO_OR_LESS = "The quantity of the selected items must be at least 1.";
     case BOOKING_NOT_IN_TIMESLOT = "Your order must be done at the time between your timeslot's start time and the next timeslot's start time.";
@@ -22,13 +22,83 @@ class Order
         $this->booking = new Booking($database, $session);
     }
 
-    public function orderItems($booking_id, $items_and_quantities) {
-        $operation = new CrudOperation();
-
+    private function createRows($items_and_quantities) {
         $rows = [];
         foreach ($items_and_quantities as $item) {
             $rows[] = "(?, LAST_INSERT_ID(), ?)";
         }
+
+        return $rows;
+    }
+
+    public function orderItems($booking_id, $items_and_quantities) {
+        $operation = new CrudOperation();
+
+        $items_are_found = false;
+        if (isset($items_and_quantities)) {
+            foreach ($items_and_quantities as $name => $quantity) {
+                if ($name AND $quantity) {
+                    $items_are_found = true;
+                }
+            }
+        }
+
+        $booking = $this->booking->getBooking($booking_id);
+        if (isset($booking->error)) {
+            return $operation->createMessage($booking->message, $booking->message);
+        }
+
+        $items_exist = true;
+        $quantity_less_than_zero = false;
+        if ($items_are_found) {
+            $item_model = new Item($this->database);
+            foreach ($items_and_quantities as $name => $quantity) {
+                $item = $item_model->getItem($name);
+                if (isset($item->error)) {
+                    return $operation->createMessage($item->message, $item->message);
+                }
+
+                if (! $item->result) {
+                    $items_exist = false;
+                    break;
+                }
+            }
+
+            foreach ($items_and_quantities as $name => $quantity) {
+                if ($quantity < 0) {
+                    $quantity_less_than_zero = true;
+                }
+            }
+        }
+
+        $timeslot_model = new Timeslot($this->database);
+        $ordered_timeslots = $timeslot_model->getOrderedTimeslots();
+        if (isset($ordered_timeslots->error)) {
+            return $operation->createMessage($ordered_timeslots->message, $ordered_timeslots->message);
+        }
+
+        $timeslot_start_times = array_keys($ordered_timeslots->result);
+        $start_time_key = array_search($booking->result["timeslot_start_time"], $timeslot_start_times);
+
+        $valid_start_time = strtotime($booking->result["booking_date"] . " " . $booking->result["timeslot_start_time"]);
+        $valid_end_time = strtotime($booking->result["booking_date"] . " " . $ordered_timeslots->result[$start_time_key + 1]["timeslot_start_time"]);
+
+        $error = match(true) {
+            ($booking_id == NULL) OR ($booking_id == 0) OR ($booking_id == "") => OrderError::BOOKING_ID_EMPTY,
+            ! $items_are_found => OrderError::AT_LEAST_ONE_ITEM,
+            ! $booking->result => OrderError::BOOKING_ID_NOT_EXIST,
+            ! $items_exist => OrderError::ITEM_NAMES_NOT_EXIST,
+            $booking->result["username"] != $this->session->username => OrderError::USER_NO_PERMISSION,
+            $quantity_less_than_zero => OrderError::ITEM_QUANTITY_ZERO_OR_LESS,
+            (time() < $valid_start_time) OR (time() >= $valid_end_time) => OrderError::BOOKING_NOT_IN_TIMESLOT,
+            default => false
+        };
+
+        if ($error) {
+            return $operation->createMessage($error->value, $error->value);
+        }
+
+        $rows = self::createRows($items_and_quantities);
 
         try {
             $order_items = $this->database->database_handle->prepare(
@@ -76,6 +146,27 @@ class Item
             if ($gotten_items) {
                 $items = $get_items->fetchAll();
                 return $operation->createMessage("Successfully obtained items.", CrudOperation::NO_ERRORS, $items);
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+        }
+    }
+
+    public function getItem($item_name) {
+        $operation = new CrudOperation();
+
+        try {
+            $get_item = $this->database->database_handle->prepare(
+                "SELECT item_name, price FROM items WHERE item_name = :item_name"
+            );
+            $gotten_item = $get_item->execute([
+                "item_name" => $item_name
+            ]);
+            if ($gotten_item) {
+                $item = $get_item->fetch();
+                return $operation->createMessage("Successfully obtained item.", CrudOperation::NO_ERRORS, $item);
             } else {
                 return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
             }

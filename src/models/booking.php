@@ -61,6 +61,27 @@ class Timeslot
 
         return $operation->createMessage("Fetched timeslot successfully.", CrudOperation::NO_ERRORS, $timeslot);
     }
+
+    public function getOrderedTimeslots() {
+        $operation = new CrudOperation();
+
+        try {
+            $get_timeslots = $this->database->database_handle->prepare(
+                "SELECT timeslot_start_time FROM timeslots
+                ORDER BY timeslot_start_time ASC"
+            );
+            $gotten_timeslots = $get_timeslots->execute();
+            if ($gotten_timeslots) {
+                $timeslots = $get_timeslots->fetchAll();
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR . "Failed to fetch timeslots.", CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR . "Failed to fetch timeslots.", CrudOperation::DATABASE_ERROR);
+        }
+
+        return $operation->createMessage("Fetched timeslots successfully.", CrudOperation::NO_ERRORS, $timeslots);
+    }
 }
 
 class Booking
@@ -176,6 +197,27 @@ class Booking
             ]);
             if ($gotten_bookings) {
                 $bookings = $get_bookings->fetchAll();
+                return $operation->createMessage("Successfully obtained bookings.", CrudOperation::NO_ERRORS, $bookings);
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+        }
+    }
+
+    public function getBooking($booking_id) {
+        $operation = new CrudOperation();
+
+        try {
+            $get_bookings = $this->database->database_handle->prepare(
+                "SELECT booking_id, timeslot_start_time, booking_date, username FROM bookings WHERE booking_id = :booking_id"
+            );
+            $gotten_bookings = $get_bookings->execute([
+                "booking_id" => $booking_id
+            ]);
+            if ($gotten_bookings) {
+                $bookings = $get_bookings->fetch();
                 return $operation->createMessage("Successfully obtained bookings.", CrudOperation::NO_ERRORS, $bookings);
             } else {
                 return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
