@@ -115,7 +115,7 @@
                 </section>
 
                 <div class="card-footer">
-                    <div class="row">
+                    <div class="row p-3">
                         <section class="alert alert-info">
                             <h4>Summary</h4>
                             <ul class="list-group bg-info bg-transparent">
