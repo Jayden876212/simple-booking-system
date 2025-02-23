@@ -158,9 +158,57 @@
                     <h2>View Your Orders</h2>
                 </div>
                 <div class="card-body">
-                    <pre>
-                        <?=print_r($orders->result)?>
-                    </pre>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <th scope="col">ID</th>
+                                <th scope="col">Date & Time Ordered</th>
+                                <th scope="col">Total Price</th>
+                                <th scope="col">Details</th>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($orders->result as $order): ?>
+                                    <tr>
+                                        <th scope="row">
+                                            #<?=$order["order_id"]?>
+                                        </th>
+                                        <td>
+                                            <?=$order["datetime_ordered"]?>
+                                        </td>
+                                        <td>
+                                            £<?=$order["total_price"]?>
+                                        </td>
+                                        <td>
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderDetails_<?=$order["order_id"]?>">
+                                                View
+                                            </button>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="orderDetails_<?=$order["order_id"]?>" tabindex="-1" aria-labelledby="orderDetailsLabel_<?=$order["order_id"]?>" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h3 class="modal-title fs-5" id="orderDetailsLabel_<?=$order["order_id"]?>">View Order #<?=$order["order_id"]?></h3>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <pre>
+                                                                <?=print_r($orders_and_items[$order["order_id"]])?>
+                                                            </pre>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </section>

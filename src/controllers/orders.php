@@ -26,6 +26,7 @@ class OrdersController
         $bookings = $this->booking->getBookings($this->session->username);
         $items = $this->item->getItems();
         $orders = $this->order->getOrders($this->session->username);
+        $orders_and_items = [];
         if (! isset($_REQUEST["error"])) {
             if (isset($bookings->error)) {
                 redirect("bookings", $bookings->message, $bookings->message);
@@ -35,6 +36,11 @@ class OrdersController
             }
             if (isset($orders->error)) {
                 redirect("bookings", $orders->message, $orders->message);
+            }
+        }
+        if (isset($orders->result)) {
+            foreach ($orders->result as $order) {
+                $orders_and_items[$order["order_id"]] = $this->order->getOrderItems($this->session->username, $order["order_id"]);
             }
         }
 

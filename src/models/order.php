@@ -64,10 +64,16 @@ class Order
                 }
             }
 
+            $items_to_be_removed = [];
             foreach ($items_and_quantities as $name => $quantity) {
                 if ($quantity < 0) {
                     $quantity_less_than_zero = true;
+                } else if ($quantity == 0) {
+                    $items_to_be_removed[] = $name;
                 }
+            }
+            foreach ($items_to_be_removed as $item_name) {
+                unset($items_and_quantities[$item_name]);
             }
         }
 
@@ -90,7 +96,7 @@ class Order
             ! $items_exist => OrderError::ITEM_NAMES_NOT_EXIST,
             $booking->result["username"] != $this->session->username => OrderError::USER_NO_PERMISSION,
             $quantity_less_than_zero => OrderError::ITEM_QUANTITY_ZERO_OR_LESS,
-            (time() < $valid_start_time) OR (time() >= $valid_end_time) => OrderError::BOOKING_NOT_IN_TIMESLOT,
+            // (time() < $valid_start_time) OR (time() >= $valid_end_time) => OrderError::BOOKING_NOT_IN_TIMESLOT,
             default => false
         };
 
@@ -130,12 +136,13 @@ class Order
 
         try {
             $get_orders = $this->database->database_handle->prepare(
-                "SELECT orders.order_id, orders.datetime_ordered, item_orders.item_name, SUM(item_orders.quantity)
+                "SELECT orders.order_id, orders.datetime_ordered, SUM(item_orders.quantity * items.price) AS total_price
                 FROM orders
                 JOIN item_orders ON orders.order_id = item_orders.order_id
                 JOIN bookings ON bookings.booking_id = orders.booking_id
+                JOIN items ON items.item_name = item_orders.item_name
                 WHERE bookings.username = :username
-                GROUP BY item_orders.item_name"
+                GROUP BY orders.order_id"
             );
             $gotten_orders = $get_orders->execute([
                 "username" => $username
@@ -147,7 +154,35 @@ class Order
                 return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
             }
         } catch (PDOException $exception) {
-            return $operation->createMessage($exception, CrudOperation::DATABASE_ERROR);
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+        }
+    }
+
+    public function getOrderItems($username, $order_id) {
+        $operation = new CrudOperation();
+
+        try {
+            $get_order = $this->database->database_handle->prepare(
+                "SELECT item_orders.item_name, SUM(item_orders.quantity), SUM(items.price) 
+                FROM orders
+                JOIN item_orders ON orders.order_id = item_orders.order_id
+                JOIN bookings ON bookings.booking_id = orders.booking_id
+                JOIN items ON items.item_name = item_orders.item_name
+                WHERE (bookings.username = :username) AND (orders.order_id = :order_id)
+                GROUP BY item_orders.item_name"
+            );
+            $gotten_order = $get_order->execute([
+                "username" => $username,
+                "order_id" => $order_id
+            ]);
+            if ($gotten_order) {
+                $order = $get_order->fetchAll();
+                return $operation->createMessage("Successfully obtained order and associated items.", CrudOperation::NO_ERRORS, $order);
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
         }
     }
 }
