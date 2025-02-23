@@ -163,7 +163,7 @@ class Order
 
         try {
             $get_order = $this->database->database_handle->prepare(
-                "SELECT item_orders.item_name, SUM(item_orders.quantity), SUM(items.price) 
+                "SELECT item_orders.item_name, SUM(item_orders.quantity) as quantity, SUM(items.price) as price, SUM(item_orders.quantity * items.price) AS total_price
                 FROM orders
                 JOIN item_orders ON orders.order_id = item_orders.order_id
                 JOIN bookings ON bookings.booking_id = orders.booking_id
