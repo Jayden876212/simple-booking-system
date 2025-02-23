@@ -8,7 +8,7 @@
 <h1 class="mx-auto text-center"><?=PAGE_TITLE?></h1>
 <article class="container-fluid">
     <div class="row">
-        <div class="col-md-5 mx-auto">
+        <section class="col-md-5 mx-auto">
             <form class="card" action="" method="POST">
                 <div class="card-header">
                     <h2>Order Items</h2>
@@ -48,83 +48,81 @@
                     <div class="list-group-item">
                         <h3 class="card-title">Add items to your order:</h3>
                     </div>
-                    <section class="container-fluid list-group-item">
+                    <div class="list-group-item">
                         <div class="row">
-                            <div class="col-md-3">
-                                <h4>Name</h4>
-                            </div>
-                            <div class="col-md-3">
-                                <h4>Price</h4>
-                            </div>
-                            <div class="col-md-3">
-                                <h4>Quantity</h4>
-                            </div>
-                            <div class="col-md-3">
-                                <h4>Total</h4>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="itemsList">
+                                        <?php if (isset($items)): ?>
+                                            <?php if (is_object($items)): ?>
+                                                <?php if (isset($items->result) && (! $items->error)): ?>
+                                                    <?php foreach ($items->result as $item): ?>
+                                                        <tr id="<?=$item["item_name"]?>" class="item-product">
+                                                            <th scope="row" class="col-md-3">
+                                                                <p class="item-name" id="name_of_<?=$item["item_name"]?>"><?=$item["item_name"]?></p>
+                                                            </th>
+                                                            <td class="col-md-3">
+                                                                <p>
+                                                                    £<i
+                                                                        class="item-price"
+                                                                        id="price_of_<?=$item["item_name"]?>"
+                                                                        title="Price of <?=$item["item_name"]?>"
+                                                                    >
+                                                                        <?=$item["price"]?>
+                                                                    </i>
+                                                                </p>
+                                                            </td>
+                                                            <td class="col-md-3">
+                                                                <input
+                                                                    class="item-quantity form-control"
+                                                                    type="number"
+                                                                    id="quantity_of_<?=$item["item_name"]?>"
+                                                                    name="quantity_of_<?=$item["item_name"]?>"
+                                                                    value="0"
+                                                                    onchange="updateItems()"
+                                                                    title="Select the amount of <?=$item["item_name"]?>(s) that you want"
+                                                                >
+                                                            </td>
+                                                            <td class="col-md-3">
+                                                                <p>
+                                                                    £<i
+                                                                        class="item-total"
+                                                                        id="total_of_<?=$item["item_name"]?>"
+                                                                        title="Total price of <?=$item["item_name"]?>"
+                                                                    >
+                                                                        0
+                                                                    </i>
+                                                                </p>
+                                                            </td>
+                                                        </tr>
+                                                    <?php endforeach ?>
+                                                <?php endif ?>
+                                            <?php endif ?>
+                                        <?php endif ?>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
-                        <section id="itemsList">
-                            <?php if (isset($items)): ?>
-                                <?php if (is_object($items)): ?>
-                                    <?php if (isset($items->result) && (! $items->error)): ?>
-                                        <?php foreach ($items->result as $item): ?>
-                                            <div id="<?=$item["item_name"]?>" class="row item-product">
-                                                <div class="col-md-3">
-                                                    <p class="item-name" id="name_of_<?=$item["item_name"]?>"><?=$item["item_name"]?></p>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <p>
-                                                        £<i
-                                                            class="item-price"
-                                                            id="price_of_<?=$item["item_name"]?>"
-                                                            title="Price of <?=$item["item_name"]?>"
-                                                        >
-                                                            <?=$item["price"]?>
-                                                        </i>
-                                                    </p>
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <input
-                                                        class="item-quantity form-control"
-                                                        type="number"
-                                                        id="quantity_of_<?=$item["item_name"]?>"
-                                                        name="quantity_of_<?=$item["item_name"]?>"
-                                                        value="0"
-                                                        onchange="updateItems()"
-                                                        title="Select the amount of <?=$item["item_name"]?>(s) that you want"
-                                                    >
-                                                </div>
-                                                <div class="col-md-3">
-                                                    <p>
-                                                        £<i
-                                                            class="item-total"
-                                                            id="total_of_<?=$item["item_name"]?>"
-                                                            title="Total price of <?=$item["item_name"]?>"
-                                                        >
-                                                            0
-                                                        </i>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        <?php endforeach ?>
-                                    <?php endif ?>
-                                <?php endif ?>
-                            <?php endif ?>
-                        </section>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <h4>Summary</h4>
-                                <p>
-                                    <b>Overall Total: </b> £<i id="overallTotalPrice">0</i>
-                                    <br>
-                                    <b>Overall Quantity: </b> <i id="overallQuantity">0</i>
-                                </p>
-                            </div>
-                        </div>
-                    </section>
+                    </div>
                 </section>
 
                 <div class="card-footer">
+                    <section class="row">
+                        <h4>Summary</h4>
+                        <p>
+                            <b>Overall Total: </b> £<i id="overallTotalPrice">0</i>
+                            <br>
+                            <b>Overall Quantity: </b> <i id="overallQuantity">0</i>
+                        </p>
+                    </section>
                     <section class="d-flex flex-row justify-content-between">
                         <h3 class="fs-5">
                             <label for="orderItems">Finished ordering?</label>
