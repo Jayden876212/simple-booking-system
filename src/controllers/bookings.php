@@ -20,29 +20,27 @@ class BookingsController
             redirect("account/login", AccountError::USER_LOGGED_OUT, AccountError::USER_LOGGED_OUT, "bookings");
         }
 
-        if (! isset($_REQUEST["error"])) {
-            $timeslots = (new Timeslot($this->database))->getTimeslots();
-            if (isset($timeslots->error)) {
-                redirect("bookings", CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
-            }
+        $timeslots = (new Timeslot($this->database))->getTimeslots();
+        if (isset($timeslots->error)) {
+            redirect("", CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+        }
 
-            $bookings = $this->booking->getBookings($this->session->username);
-            if (isset($bookings->error)) {
-                redirect("bookings", CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
-            }
+        $bookings = $this->booking->getBookings($this->session->username);
+        if (isset($bookings->error)) {
+            redirect("", CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+        }
 
-            $unavailable_timeslots = $this->booking->getUnavailableTimeslots(date("Y-m-d"));
-            $create_booking = $_POST["create_booking"] ?? FALSE;
-            $timeslot_start_time = $_POST["timeslot_start_time"] ?? FALSE;
-            $booking_date = $_POST["booking_date"] ?? FALSE;
-            $form_submitted = $create_booking AND $booking_date AND $timeslot_start_time;
-            if ($form_submitted) {
-                $created_booking = $this->booking->createBooking($timeslot_start_time, $booking_date);
-                if (! $created_booking->error) {
-                    redirect("bookings", $created_booking->message);
-                } else {
-                    redirect("bookings", $created_booking->message, CrudOperation::IS_ERROR);
-                }
+        $unavailable_timeslots = $this->booking->getUnavailableTimeslots(date("Y-m-d"));
+        $create_booking = $_POST["create_booking"] ?? FALSE;
+        $timeslot_start_time = $_POST["timeslot_start_time"] ?? FALSE;
+        $booking_date = $_POST["booking_date"] ?? FALSE;
+        $form_submitted = $create_booking AND $booking_date AND $timeslot_start_time;
+        if ($form_submitted) {
+            $created_booking = $this->booking->createBooking($timeslot_start_time, $booking_date);
+            if (! $created_booking->error) {
+                redirect("bookings", $created_booking->message);
+            } else {
+                redirect("bookings", $created_booking->message, CrudOperation::IS_ERROR);
             }
         }
 
