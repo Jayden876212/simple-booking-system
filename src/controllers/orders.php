@@ -35,20 +35,25 @@ class OrdersController
                 $booking_id = $_POST["booking"];
             }
 
-            $items_and_quantities = [];
-            foreach ($items->result as $item) {
-                $item_quantity = $_POST["quantity_of_" . $item["item_name"]] ?? 0;
-                if ($item_quantity > 0) {
-                    $items_and_quantities[$item["item_name"]] = $item_quantity;
+            $submit_button_pressed = $_POST["order_items"] ?? FALSE;
+
+            if (isset($booking_id) AND $submit_button_pressed) {
+                $items_and_quantities = [];
+                foreach ($items->result as $item) {
+                    $item_quantity = $_POST["quantity_of_" . $item["item_name"]] ?? 0;
+                    if ($item_quantity > 0) {
+                        $items_and_quantities[$item["item_name"]] = $item_quantity;
+                    }
                 }
-            }
-            if ($items_and_quantities and isset($booking_id)) {
-                $order = new Order($this->database, $this->session);
-                $ordered_items = $order->orderItems($booking_id, $items_and_quantities);
-                if (isset($ordered_items->error)) {
-                    redirect("bookings/orders", $ordered_items->message, $ordered_items->message);
+
+                if ($items_and_quantities) {
+                    $order = new Order($this->database, $this->session);
+                    $ordered_items = $order->orderItems($booking_id, $items_and_quantities);
+                    if (isset($ordered_items->error)) {
+                        redirect("bookings/orders", $ordered_items->message, $ordered_items->message);
+                    }
+                    redirect("bookings/orders", $ordered_items->message);
                 }
-                redirect("bookings/orders", $ordered_items->message);
             }
         }
 

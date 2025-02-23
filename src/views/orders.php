@@ -109,7 +109,7 @@
                         <h3 class="fs-5">
                             <label for="orderItems">Finished ordering?</label>
                         </h2>
-                        <button id="orderItems" name="order_items" type="submit" class="btn btn-success">Order Items</button>
+                        <button id="orderItems" name="order_items" type="submit" class="btn btn-success" value="true">Order Items</button>
                     </section>
                 </div>
             </form>
