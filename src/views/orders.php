@@ -15,38 +15,38 @@
                 </div>
                 <section class="list-group list-group-flush">
                     <div class="list-group-item">
-                        <h3 class="card-title">Choose your existing booking</h3>
-                    </div>
-                    <section class="list-group-item">
-                        <select id="booking" name="booking">
-                            <?php if (is_object($bookings)): ?>
-                                <?php if (isset($bookings->result) && (! $bookings->error)): ?>
-                                    <option
-                                        value="" 
-                                        id="bookingOptionPlaceholder"
-                                        <?php if (! $booking_id): ?>
-                                            selected
-                                        <?php endif?>
-                                    >
-                                        Please select a booking
-                                    </option>
-                                    <?php foreach ($bookings->result as $booking): ?>
+                        <h3 class="card-title"><label class="form-label" for="booking">Choose your existing booking:</label></h3>
+                        <section>
+                            <select id="booking" name="booking" class="form-select">
+                                <?php if (is_object($bookings)): ?>
+                                    <?php if (isset($bookings->result) && (! $bookings->error)): ?>
                                         <option
-                                            value="<?=$booking["booking_id"]?>"
-                                            <?php if ($booking["booking_id"] == $booking_id): ?>
+                                            value="" 
+                                            id="bookingOptionPlaceholder"
+                                            <?php if (! $booking_id): ?>
                                                 selected
-                                            <?php endif ?>
+                                            <?php endif?>
                                         >
-                                            Booking #<?=$booking["booking_id"]?> (<?=$booking["booking_date"]?> <?=$booking["timeslot_start_time"]?>)
+                                            Please select a booking
                                         </option>
-                                    <?php endforeach ?>
+                                        <?php foreach ($bookings->result as $booking): ?>
+                                            <option
+                                                value="<?=$booking["booking_id"]?>"
+                                                <?php if ($booking["booking_id"] == $booking_id): ?>
+                                                    selected
+                                                <?php endif ?>
+                                            >
+                                                Booking #<?=$booking["booking_id"]?> (<?=$booking["booking_date"]?> <?=$booking["timeslot_start_time"]?>)
+                                            </option>
+                                        <?php endforeach ?>
+                                    <?php endif ?>
                                 <?php endif ?>
-                            <?php endif ?>
-                        </select>
-                    </section>
+                            </select>
+                        </section>
+                    </div>
 
                     <div class="list-group-item">
-                        <h3 class="card-title">Add items to your order</h3>
+                        <h3 class="card-title">Add items to your order:</h3>
                     </div>
                     <section class="container-fluid list-group-item">
                         <div class="row">
@@ -74,16 +74,36 @@
                                                 </div>
                                                 <div class="col-md-3">
                                                     <p>
-                                                        £<i class="item-price" id="price_of_<?=$item["item_name"]?>"><?=$item["price"]?></i>
+                                                        £<i
+                                                            class="item-price"
+                                                            id="price_of_<?=$item["item_name"]?>"
+                                                            title="Price of <?=$item["item_name"]?>"
+                                                        >
+                                                            <?=$item["price"]?>
+                                                        </i>
                                                     </p>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <input class="item-quantity" type="number" id="quantity_of_<?=$item["item_name"]?>" name="quantity_of_<?=$item["item_name"]?>" value="0" onchange="
-                                                        updateItems()
-                                                    ">
+                                                    <input
+                                                        class="item-quantity form-control"
+                                                        type="number"
+                                                        id="quantity_of_<?=$item["item_name"]?>"
+                                                        name="quantity_of_<?=$item["item_name"]?>"
+                                                        value="0"
+                                                        onchange="updateItems()"
+                                                        title="Select the amount of <?=$item["item_name"]?>(s) that you want"
+                                                    >
                                                 </div>
                                                 <div class="col-md-3">
-                                                    <p>£<i class="item-total" id="total_of_<?=$item["item_name"]?>">0</i></p>
+                                                    <p>
+                                                        £<i
+                                                            class="item-total"
+                                                            id="total_of_<?=$item["item_name"]?>"
+                                                            title="Total price of <?=$item["item_name"]?>"
+                                                        >
+                                                            0
+                                                        </i>
+                                                    </p>
                                                 </div>
                                             </div>
                                         <?php endforeach ?>
