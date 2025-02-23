@@ -24,6 +24,8 @@ class CrudOperation
     }
 }
 
+date_default_timezone_set("Europe/London");
+
 require_once "models/session.php";
 require_once "models/database.php";
 require_once "models/account.php";
