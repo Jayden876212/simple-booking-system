@@ -146,5 +146,17 @@ class BookingCancellationController
     }
 
     public function handleRequest() {
+        $booking_to_be_cancelled = $_REQUEST["booking_id"] ?? FALSE;
+
+        if (!$booking_to_be_cancelled) {
+            redirect("bookings", "You must provide the ID of the booking that you want to cancel.", CrudOperation::IS_ERROR);
+        }
+
+        $cancelled_booking = $this->booking->cancelBooking($booking_to_be_cancelled);
+        if (isset($cancelled_booking->error)) {
+            redirect("bookings", $cancelled_booking->message, CrudOperation::IS_ERROR);
+        }
+
+        redirect("bookings", $cancelled_booking->message);
     }
 }

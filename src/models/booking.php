@@ -182,4 +182,24 @@ class Booking
             return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
         }
     }
+    
+    public function cancelBooking($booking_id) {
+        $operation = new CrudOperation();
+
+        try {
+            $cancel_booking = $this->database->database_handle->prepare(
+                "DELETE FROM bookings WHERE booking_id = :booking_id"
+            );
+            $cancelled_booking = $cancel_booking->execute([
+                "booking_id" => $booking_id
+            ]);
+            if ($cancelled_booking) {
+                return $operation->createMessage("Successfully cancelled booking.");
+            } else {
+                return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+            }
+        } catch (PDOException $exception) {
+            return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
+        }
+    }
 }

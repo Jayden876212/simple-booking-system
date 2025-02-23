@@ -92,21 +92,30 @@
                 <ul class="list-group list-group-flush">
                     <?php if (isset($bookings)): ?>
                         <?php if (is_object($bookings)): ?>
-                            <?php foreach ($bookings->result as $booking): ?>
-                                <li class="list-group-item d-flex flex-row justify-content-between">
-                                    <p>
-                                        Booking #<?=$booking["booking_id"]?> - <?=$booking["timeslot_start_time"]?> <?=$booking["booking_date"]?>
-                                    </p>
-                                    <div class="d-flex flex-row gap-3">
-                                        <button class="btn btn-danger">
-                                            Cancel
-                                        </button>
-                                        <button class="btn btn-primary">
-                                            View
-                                        </button>
-                                    </div>
-                                </li>
-                            <?php endforeach ?>
+                            <?php if (isset($bookings->result)): ?>
+                                <?php foreach ($bookings->result as $booking): ?>
+                                    <li class="list-group-item d-flex flex-row justify-content-between">
+                                        <p>
+                                            Booking #<?=$booking["booking_id"]?> - <?=$booking["timeslot_start_time"]?> <?=$booking["booking_date"]?>
+                                        </p>
+                                        <div class="d-flex flex-row gap-3">
+                                            <a href="<?=HOST?><?=WORKING_DIRECTORY?>/bookings/cancel?booking_id=<?=$booking["booking_id"]?>">
+                                                <button class="btn btn-danger">
+                                                    Cancel
+                                                </button>
+                                            <a href="">
+                                                <button class="btn btn-primary">
+                                                    View
+                                                </button>
+                                            </a>
+                                        </div>
+                                    </li>
+                                <?php endforeach ?>
+                            <?php else: ?>
+                                <div class="card-body">
+                                    You have not made any bookings yet.
+                                </div>
+                            <?php endif ?>
                         <?php endif ?>
                     <?php endif ?>
                 </ul>
