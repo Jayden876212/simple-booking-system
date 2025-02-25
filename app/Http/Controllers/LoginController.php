@@ -18,8 +18,13 @@ class LoginController extends Controller
         return view("pages/login");
     }
 
-    public function login(Request $request): RedirectResponse
+    public function login(Request $request)
     {
+        $request->validate([
+            "username" => ["required"],
+            "password" => ["required"]
+        ]);
+
         return redirect('/home')->with('success', 'Login successful!');
     }
 }

@@ -21,10 +21,15 @@ class RegistrationController extends Controller
 
     public function show(): View
     {
-        return view("pages/register");
+        return view("pages/register", [
+            "MIN_USERNAME_LENGTH" => self::MIN_USERNAME_LENGTH,
+            "MAX_USERNAME_LENGTH" => self::MAX_USERNAME_LENGTH,
+            "MIN_PASSWORD_LENGTH" => self::MIN_PASSWORD_LENGTH,
+            "MAX_PASSWORD_LENGTH" => self::MAX_PASSWORD_LENGTH
+        ]);
     }
 
-    public function register(Request $request): RedirectResponse
+    public function register(Request $request)
     {
         $request->validate([
             "username" => ["required", "unique:users,username", "min:".self::MIN_USERNAME_LENGTH, "max:".self::MAX_USERNAME_LENGTH],
