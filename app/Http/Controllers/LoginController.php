@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\View\View;
+
+use App\Models\User;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
+class LoginController extends Controller
+{
+    public function show(): View
+    {
+        return view("pages/login");
+    }
+}
