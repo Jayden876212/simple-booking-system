@@ -21,7 +21,7 @@
             <div class="card-footer container-fluid">
                 <div class="row">
                     <div class="col-md-6">
-                        <a href=""><button type="button" class="btn btn-primary text-center w-100">Sign Up</button></a>
+                        <a href="{{ url("account/register") }}"><button type="button" class="btn btn-primary text-center w-100">Sign Up</button></a>
                     </div>
                     <div class="col-md-6">
                         <button type="submit" class="btn btn-success text-center w-100" name="login" value="true">Login</button>
