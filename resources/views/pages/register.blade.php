@@ -32,7 +32,7 @@
             </div>
 
             @error("username")
-                <div class="alert alert-danger">
+                <div class="alert alert-danger m-2" role="alert">
                     {{ $message }}
                 </div>
             @enderror

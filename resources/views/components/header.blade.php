@@ -36,4 +36,11 @@
             </div>
         </div>
     </nav>
+    @if (\Session::has('success'))
+        <div class="alert alert-success m-2" role="alert">
+            <ul>
+                <li>{!! \Session::get('success') !!}</li>
+            </ul>
+        </div>
+    @endif
 </header>

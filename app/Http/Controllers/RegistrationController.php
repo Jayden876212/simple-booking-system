@@ -9,6 +9,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+use Session;
+
 class RegistrationController extends Controller
 {
     private const MIN_USERNAME_LENGTH = 1;
@@ -34,6 +36,6 @@ class RegistrationController extends Controller
             "password" => Hash::make($request->password)
         ]);
 
-        return redirect('/accounts/login')->with('success', 'Registration successful! Please log in.');
+        return redirect('/account/login')->with('success', 'Registration successful! Please log in.');
     }
 }
