@@ -2,6 +2,8 @@
 
 @section("content")
 
-<h1>This is the home page woo yeah</h1>
+@section("title", "Home")
+
+<h1>Home</h1>
 
 @stop
