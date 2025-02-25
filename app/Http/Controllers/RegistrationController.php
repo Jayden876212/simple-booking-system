@@ -24,7 +24,7 @@ class RegistrationController extends Controller
         return view("pages/register");
     }
 
-    public function register(Request $request)
+    public function register(Request $request): RedirectResponse
     {
         $request->validate([
             "username" => ["required", "unique:users,username", "min:".self::MIN_USERNAME_LENGTH, "max:".self::MAX_USERNAME_LENGTH],

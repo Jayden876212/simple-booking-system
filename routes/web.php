@@ -14,4 +14,4 @@ Route::get("/account/register", [RegistrationController::class, "show"]);
 Route::post("/account/register", [RegistrationController::class, "register"]);
 
 Route::get("/account/login", [LoginController::class, "show"]);
-Route::post("/account/login", [LoginController::class, "show"]);
+Route::post("/account/login", [LoginController::class, "login"]);

@@ -17,4 +17,9 @@ class LoginController extends Controller
     {
         return view("pages/login");
     }
+
+    public function login(Request $request): RedirectResponse
+    {
+        return redirect('/home')->with('success', 'Login successful!');
+    }
 }
