@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\View\View;
 
-use App\Http\Controllers\Controller;
-
-class HomeController extends Controller
+class HomeController
 {
     public function show(): View
     {
