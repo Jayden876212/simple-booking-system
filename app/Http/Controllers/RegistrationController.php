@@ -25,8 +25,8 @@ class RegistrationController extends Controller
     public function register(Request $request)
     {
         $request->validate([
-            "username" => ["required", "unique:users", "min:".self::MIN_USERNAME_LENGTH, "max:".self::MAX_USERNAME_LENGTH],
-            "username" => ["required", "min:".self::MIN_PASSWORD_LENGTH, "max:".self::MAX_PASSWORD_LENGTH],
+            "username" => ["required", "unique:users,username", "min:".self::MIN_USERNAME_LENGTH, "max:".self::MAX_USERNAME_LENGTH],
+            "password" => ["required", "min:".self::MIN_PASSWORD_LENGTH, "max:".self::MAX_PASSWORD_LENGTH]
         ]);
 
         User::create([
