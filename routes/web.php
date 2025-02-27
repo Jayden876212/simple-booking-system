@@ -11,7 +11,7 @@ Route::get("/home", function () {
 });
 
 // Account Pages
-Route::get("/account", [AccountController::class, "handle"]);
+Route::get("/account", [AccountController::class, "handleRedirect"]);
 
 Route::get("/account/register", [AccountController::class, "showRegister"]);
 Route::post("/account/register", [AccountController::class, "register"]);
