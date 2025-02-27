@@ -2,7 +2,7 @@
 
 @section("content")
 
-@section("title", "Sign Up")
+@section("title", $page_title)
 
 <article class="container-fluid">
     <section class="col-md-5 mx-auto">
