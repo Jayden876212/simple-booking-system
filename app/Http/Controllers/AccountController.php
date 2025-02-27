@@ -78,6 +78,17 @@ class AccountController extends Controller
             "password" => Hash::make($request->password)
         ]);
 
-        return redirect('/account/login')->with('success', 'Registration successful! Please log in.');
+        return redirect("/account/login")->with("success", "Registration successful! Please log in.");
+    }
+
+    public function logout(Request $request)
+    {
+        if (Auth::check()) {
+            $request->session()->invalidate();
+
+            return redirect("/home")->with("success", "Logout successfull!");
+        } else {
+            return redirect("/home")->with("error", "Logout failed. (You are not logged in.)");
+        }
     }
 }

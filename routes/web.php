@@ -18,3 +18,5 @@ Route::post("/account/register", [AccountController::class, "register"]);
 
 Route::get("/account/login", [AccountController::class, "showLogin"]);
 Route::post("/account/login", [AccountController::class, "login"]);
+
+Route::get("/account/logout", [AccountController::class, "logout"]);
