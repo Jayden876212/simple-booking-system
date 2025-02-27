@@ -23,11 +23,24 @@
             <div class="btn-group dropstart">
                 <button
                     type="button"
-                    class="btn btn-outline-secondary dropdown-toggle"
+                    class="btn 
+                        @auth
+                            btn-success
+                        @endauth
+                        @guest
+                            btn-outline-secondary
+                        @endguest
+                    dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false"
                 >
-                    <i class="fa-regular fa-user"></i>
-                    Not logged in
+                    @auth
+                        <i class="fa-solid fa-user"></i>
+                        {{ Auth::user()["username"] }}
+                    @endauth
+                    @guest
+                        <i class="fa-regular fa-user"></i>
+                        Not logged in
+                    @endguest
                 </button>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="">Log In</a></li>
