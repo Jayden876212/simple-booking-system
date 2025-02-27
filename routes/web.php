@@ -6,9 +6,7 @@ use App\Http\Controllers\AccountController;
 
 // Home/Landing Page
 Route::get("/", [HomeController::class, "show"]);
-Route::get("/home", function () {
-    return redirect("/");
-});
+Route::get("/home", [HomeController::class, "handleRedirect"]);
 
 // Account Pages
 Route::get("/account", [AccountController::class, "handleRedirect"]);
@@ -20,3 +18,4 @@ Route::get("/account/login", [AccountController::class, "showLogin"]);
 Route::post("/account/login", [AccountController::class, "login"]);
 
 Route::get("/account/logout", [AccountController::class, "logout"]);
+Route::get("/account/delete", [AccountController::class, "delete"]);
