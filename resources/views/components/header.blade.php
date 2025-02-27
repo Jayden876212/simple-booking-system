@@ -109,9 +109,11 @@
     </nav>
     @if (\Session::has('success'))
         <div class="alert alert-success m-2" role="alert">
-            <ul>
-                <li>{!! \Session::get('success') !!}</li>
-            </ul>
+            {!! \Session::get('success') !!}
+        </div>
+    @elseif (\Session::has('error'))
+        <div class="alert alert-danger m-2" role="alert">
+            {!! \Session::get('error') !!}
         </div>
     @endif
 </header>

@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
 use Session;
+use Throwable;
 
 class AccountController extends Controller
 {
@@ -89,6 +90,22 @@ class AccountController extends Controller
             return redirect("/home")->with("success", "Logout successfull!");
         } else {
             return redirect("/home")->with("error", "Logout failed. (You are not logged in.)");
+        }
+    }
+
+    public function delete(Request $request) {
+        if (Auth::check()) {
+            try {
+                $user_id = Auth::id();
+                User::destroy($user_id);
+            } catch (Throwable $caught) {
+                return redirect("/home")->with("error", "Account deletion failed due to server error.");
+            } finally {
+                $request->session()->invalidate();
+                return redirect("/home")->with("success", "Successfully deleted account!");
+            }
+        } else {
+            return redirect("/home")->with("error", "Account deletion failed. (You are not logged in.)");
         }
     }
 }
