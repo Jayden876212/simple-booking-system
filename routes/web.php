@@ -8,7 +8,9 @@ use App\Http\Controllers\LoginController;
 
 // Home/Landing Page
 Route::get("/", [HomeController::class, "show"]);
-Route::redirect("/home", "/");
+Route::get("/home", function () {
+    return redirect("/");
+});
 
 // Account Pages
 Route::get("/account", [AccountController::class, "handle"]);

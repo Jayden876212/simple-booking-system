@@ -8,6 +8,7 @@ use App\Models\User;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 use Session;
 
@@ -24,7 +25,18 @@ class LoginController extends Controller
             "username" => ["required"],
             "password" => ["required"]
         ]);
+        $credentials = [
+            "username" => $request["username"],
+            "password" => $request["password"]
+        ];
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
 
-        return redirect('/home')->with('success', 'Login successful!');
+            return redirect()->intended("/home")->with('success', 'Login successful!');
+        }
+
+        return back()->withErrors([
+            "password" => "Credentials do not match"
+        ]);
     }
 }
