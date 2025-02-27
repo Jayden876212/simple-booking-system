@@ -1,8 +1,8 @@
-@extends("layouts.default")
+@extends("layouts.default", ["page_title" => $page_title])
 
 @section("content")
 
-@section("title", "Home")
+@section("title", $page_title)
 
 <h1>Home</h1>
 

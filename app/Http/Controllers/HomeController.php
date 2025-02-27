@@ -8,6 +8,6 @@ class HomeController extends Controller
 {
     public function show(): View
     {
-        return view("pages/home");
+        return view("pages/home")->with("page_title", "Home");
     }    
 }

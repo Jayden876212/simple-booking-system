@@ -22,6 +22,7 @@ class RegistrationController extends Controller
     public function show(): View
     {
         return view("pages/register", [
+            "page_title" => "Register",
             "MIN_USERNAME_LENGTH" => self::MIN_USERNAME_LENGTH,
             "MAX_USERNAME_LENGTH" => self::MAX_USERNAME_LENGTH,
             "MIN_PASSWORD_LENGTH" => self::MIN_PASSWORD_LENGTH,

@@ -8,16 +8,68 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="">Home</a>
+                    <a
+                        class="
+                            nav-link
+                            @if ($page_title == "Home")
+                                active
+                            @endif
+                        "
+                        href="{{ url("home") }}"
+                        @if ($page_title == "Home")
+                            aria-current="page"
+                        @endif
+                    >
+                        Home
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Account</a>
+                    <a
+                        class="
+                            nav-link
+                            @if (($page_title == "Login") or ($page_title == "Register"))
+                                active
+                            @endif
+                        "
+                        href="{{ url("account") }}"
+                        @if (($page_title == "Login") or ($page_title == "Register"))
+                            aria-current="page"
+                        @endif
+                    >
+                        Account
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Bookings</a>
+                    <a
+                        class="
+                            nav-link
+                            @if ($page_title == "Bookings")
+                                active
+                            @endif
+                        "
+                        href="{{ url("bookings") }}"
+                        @if ($page_title == "Bookings")
+                            aria-current="page"
+                        @endif
+                    >
+                        Bookings
+                    </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="">Orders</a>
+                    <a
+                        class="
+                            nav-link
+                            @if ($page_title == "Orders")
+                                active
+                            @endif
+                        "
+                        href="{{ url("orders") }}"
+                        @if ($page_title == "Orders")
+                            aria-current="page"
+                        @endif
+                    >
+                        Orders
+                    </a>
                 </li>
             </ul>
             <div class="btn-group dropstart">
@@ -43,8 +95,14 @@
                     @endguest
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="">Log In</a></li>
-                    <li><a class="dropdown-item" href="">Sign Up</a></li>
+                    @auth
+                        <li><a class="dropdown-item" href="{{ url("account/logout") }}">Log Out</a></li>
+                        <li><a class="dropdown-item" href="{{ url("account/delete") }}">Delete Account</a></li>
+                    @endauth
+                    @guest
+                        <li><a class="dropdown-item" href="{{ url("account/login") }}">Log In</a></li>
+                        <li><a class="dropdown-item" href="{{ url("account/register") }}">Sign Up</a></li>
+                    @endguest
                 </ul>
             </div>
         </div>

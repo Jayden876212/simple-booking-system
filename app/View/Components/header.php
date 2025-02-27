@@ -11,9 +11,10 @@ class header extends Component
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public $page_title;
+    public function __construct($pageTitle)
     {
-        //
+        $this->page_title = $pageTitle;
     }
 
     /**

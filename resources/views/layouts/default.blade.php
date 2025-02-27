@@ -4,7 +4,7 @@
         <x-head/>
     </head>
     <body>
-        <x-header/>
+        <x-header :page-title="$page_title" />
 
         <main class="container-fluid min-vh-100 my-5">
             @yield("content")

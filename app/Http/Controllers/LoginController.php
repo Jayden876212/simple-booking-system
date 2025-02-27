@@ -16,7 +16,7 @@ class LoginController extends Controller
 {
     public function show(): View
     {
-        return view("pages/login");
+        return view("pages/login", ["page_title" => "Login"]);
     }
 
     public function login(Request $request)
