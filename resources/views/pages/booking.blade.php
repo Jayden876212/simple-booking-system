@@ -12,12 +12,6 @@
     }
 @endphp
 
-<ul>
-    @foreach ($timeslots as $timeslot)
-        {{ $timeslot["timeslot_start_time"] }}
-    @endforeach
-</ul>
-
 <h1 class="text-center mx-auto mb-5">{{ $page_title }}</h1>
 
 <article class="container-fluid">
@@ -45,13 +39,13 @@
                                             $timeslot["timeslot_start_time"])
                                         )->format("H:i");
                                     @endphp
-                                    @if (isset($unavailable_timeslots->result))
+                                    @if (isset($unavailable_timeslots))
                                         @php
                                             $timeslot_status = TimeslotStatus::AVAILABLE;
                                             if (strtotime(date("Y-m-d") . "T" . $timeslot_start_time . "Z") < time()) {
                                                 $timeslot_status = TimeslotStatus::IN_THE_PAST;
                                             } else {
-                                                foreach ($unavailable_timeslots->result as $unavailable_timeslot) {
+                                                foreach ($unavailable_timeslots as $unavailable_timeslot) {
                                                     if ($unavailable_timeslot["timeslot_start_time"] == $timeslot["timeslot_start_time"]) {
                                                         $timeslot_status = TimeslotStatus::UNAVAILABLE;
                                                         break;
@@ -87,8 +81,6 @@
                                         @endswitch
                                     @endif
                                 @endforeach
-                            @elseif (isset($timeslots->error) or isset($unavailable_timeslots->error))
-                                <option id="timeslotPlaceholder" selected value="">No time slots available {{ $timeslots->error }} {{ $unavailable_timeslots->error }}</option>
                             @else
                                 <option id="timeslotPlaceholder" selected value="">No time slots available</option>
                             @endif
@@ -111,8 +103,8 @@
                 <ul class="list-group list-group-flush">
                     @if (isset($bookings))
                         @if (is_object($bookings))
-                            @if (isset($bookings->result))
-                                @foreach ($bookings->result as $booking)
+                            @if (isset($bookings))
+                                @foreach ($bookings as $booking)
                                     <li class="list-group-item d-flex flex-row justify-content-between">
                                         <p>
                                             Booking #{{ $booking["booking_id"] }} - {{ $booking["timeslot_start_time"] }} {{ $booking["booking_date"] }}

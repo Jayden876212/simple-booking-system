@@ -22,5 +22,8 @@
         <!-- Pre-defined Variables -->
 
         <!-- Bespoke Scripts -->
+        @if ($page_title == "Bookings")
+            <script src="{{ asset("js/timeslots.js") }}" type="text/javascript"></script>
+        @endif
     </body>
 </html>

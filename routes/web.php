@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\BookingsController;
 
 // Home/Landing Page
 Route::get("/", [HomeController::class, "show"]);
@@ -19,3 +20,6 @@ Route::post("/account/login", [AccountController::class, "login"]);
 
 Route::get("/account/logout", [AccountController::class, "logout"]);
 Route::get("/account/delete", [AccountController::class, "delete"]);
+
+// Bookings Pages
+Route::get("/bookings", [BookingsController::class, "showBookings"]);
