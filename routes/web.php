@@ -26,3 +26,4 @@ Route::get("/account/delete", [AccountController::class, "delete"]);
 Route::get("/bookings", [BookingsController::class, "showBookings"]);
 Route::post("/bookings", [BookingsController::class, "makeBooking"]);
 Route::get("/bookings/get-unavailable-timeslots", [TimeslotController::class, "handleRequest"]);
+Route::get("/bookings/cancel", [BookingsController::class, "cancelBooking"]);

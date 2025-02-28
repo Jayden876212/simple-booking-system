@@ -47,4 +47,16 @@ class BookingsController extends Controller
 
         return redirect("/bookings")->with("success", "Booking successful!");
     }
+
+    public function cancelBooking(Request $request) {
+        $booking_to_be_cancelled = $request->booking_id ?? FALSE;
+
+        if (!$booking_to_be_cancelled) {
+            return redirect("bookings")->with("error", "You must provide the ID of the booking that you want to cancel.");
+        }
+
+        Booking::cancelBooking($booking_to_be_cancelled, Auth::user()["username"]);
+
+        return redirect("bookings")->with("success", "Successfully cancelled booking!");
+    }
 }
