@@ -49,13 +49,13 @@ class Booking extends Model
             DateTime::createFromFormat("H:i:s", $timeslot_start_time) == FALSE => BookingError::TIMESLOT_INCORRECT_FORMAT,
             (strtotime($booking_date) < time()) AND ($booking_date != date("Y-m-d")) => BookingError::BOOKING_DATE_IN_PAST,
             time() > strtotime(date("$booking_date $timeslot_start_time")) => BookingError::TIMESLOT_IN_PAST,
-            isset($existing_timeslot->result) ? FALSE : TRUE => BookingError::TIMESLOT_NOT_EXIST,
+            isset($existing_timeslot) ? FALSE : TRUE => BookingError::TIMESLOT_NOT_EXIST,
             $specific_timeslot_unavailable => BookingError::UNAVAILABLE_TIMESLOT,
             default => false
         };
 
         if ($error) {
-            throw new Exception("Error Processing Request", 1);
+            throw new Exception($error->value, 1);
         }
 
         $booking = Booking::create([

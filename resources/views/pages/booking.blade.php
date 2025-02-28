@@ -18,6 +18,8 @@
     <section class="row mb-5">
         <div class="col-md-5 mx-auto">
             <form class="card" action="" method="POST">
+                @csrf
+
                 <div class="card-header">
                     <h2>Book a Reservation</h2>
                 </div>

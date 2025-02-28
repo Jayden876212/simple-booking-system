@@ -21,14 +21,6 @@ class BookingsController extends Controller
         $bookings = Booking::getBookings(Auth::user()["username"]);
         $unavailable_timeslots = Booking::getUnavailableTimeslots(date("Y-m-d"));
 
-        $create_booking = $_POST["create_booking"] ?? FALSE;
-        $timeslot_start_time = $_POST["timeslot_start_time"] ?? FALSE;
-        $booking_date = $_POST["booking_date"] ?? FALSE;
-        $form_submitted = $create_booking AND $booking_date AND $timeslot_start_time;
-        if ($form_submitted) {
-            $created_booking = Booking::createBooking($timeslot_start_time, $booking_date, Auth::user()["username"]);
-        }
-
         return view(
             "pages/booking",
             [
@@ -37,6 +29,23 @@ class BookingsController extends Controller
                 "unavailable_timeslots" => $unavailable_timeslots
             ]
         )->with("page_title", "Bookings");;
+    }
+
+    public function makeBooking(Request $request) {
+        if (! Auth::check()) {
+            return redirect("account/login")->with("error", "User is logged out.");
+        }
+
+        $request->validate([
+            "booking_date" => ["required"],
+            "timeslot_start_time" => ["required"]
+        ]);
+
+        $booking_date = $request->booking_date;
+        $timeslot_start_time = $request->timeslot_start_time;
+        Booking::createBooking($timeslot_start_time, $booking_date, Auth::user()["username"]);
+
+        return redirect("/bookings")->with("success", "Booking successful!");
     }
 }
 

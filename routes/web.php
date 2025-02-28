@@ -23,3 +23,4 @@ Route::get("/account/delete", [AccountController::class, "delete"]);
 
 // Bookings Pages
 Route::get("/bookings", [BookingsController::class, "showBookings"]);
+Route::post("/bookings", [BookingsController::class, "makeBooking"]);
