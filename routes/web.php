@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BookingsController;
+use App\Http\Controllers\TimeslotController;
 
 // Home/Landing Page
 Route::get("/", [HomeController::class, "show"]);
@@ -24,3 +25,4 @@ Route::get("/account/delete", [AccountController::class, "delete"]);
 // Bookings Pages
 Route::get("/bookings", [BookingsController::class, "showBookings"]);
 Route::post("/bookings", [BookingsController::class, "makeBooking"]);
+Route::get("/bookings/get-unavailable-timeslots", [TimeslotController::class, "handleRequest"]);

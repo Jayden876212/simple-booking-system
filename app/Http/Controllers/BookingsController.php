@@ -48,28 +48,3 @@ class BookingsController extends Controller
         return redirect("/bookings")->with("success", "Booking successful!");
     }
 }
-
-class TimeslotController
-{
-    private $database;
-    private $session;
-
-    public function __construct(Database $database, Session $session) {
-        $this->database = $database;
-        $this->session = $session;
-    }
-
-    public function handleRequest() {
-        $chosen_booking_date = $_REQUEST["booking_date"] ?? FALSE;
-        if ($chosen_booking_date) {
-            $booking = new Booking($this->database, $this->session);
-            $unavailable_timeslots = $booking->getUnavailableTimeslots($chosen_booking_date);
-            if (! isset($unavailable_timeslots->error) && isset($unavailable_timeslots->result)) {
-                $unavailable_timeslots_processed = array_column($unavailable_timeslots->result, "number_of_tables_booked", "timeslot_start_time");
-                $unavailable_timeslots_json =  json_encode($unavailable_timeslots_processed);
-                echo $unavailable_timeslots_json;
-            }
-        }
-        exit;
-    }
-}
