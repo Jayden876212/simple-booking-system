@@ -13,7 +13,15 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label for="usernameInput" class="form-label">Username:</label>
-                    <input type="text" class="form-control" id="usernameInput" name="username" required minlength="1" maxlength="">
+                    <input
+                        type="text"
+                        class="form-control"
+                        id="usernameInput"
+                        name="username"
+                        required
+                        minlength="{{ config("constants.MIN_USERNAME_LENGTH") }}"
+                        maxlength="{{ config("constants.MAX_USERNAME_LENGTH") }}"
+                    >
                     @error("username")
                         <div class="alert alert-danger m-2" role="alert">
                             {{ $message }}
@@ -22,7 +30,15 @@
                 </div>
                 <div class="mb-3">
                     <label for="passwordInput" class="form-label">Password:</label>
-                    <input type="password" class="form-control" id="passwordInput" name="password" required minlength="1" maxlength="">
+                    <input
+                        type="password"
+                        class="form-control"
+                        id="passwordInput"
+                        name="password"
+                        required
+                        minlength="{{ config("constants.MIN_PASSWORD_LENGTH") }}"
+                        maxlength="{{ config("constants.MAX_PASSWORD_LENGTH") }}"
+                    >
                     @error("password")
                         <div class="alert alert-danger m-2" role="alert">
                             {{ $message }}

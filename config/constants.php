@@ -1,0 +1,8 @@
+<?php
+
+return [
+    "MIN_USERNAME_LENGTH" => 1,
+    "MAX_USERNAME_LENGTH" => 20,
+    "MIN_PASSWORD_LENGTH" => 1,
+    "MAX_PASSWORD_LENGTH" => 18
+];

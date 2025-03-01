@@ -16,12 +16,6 @@ use Throwable;
 
 class AccountController extends Controller
 {
-    private const MIN_USERNAME_LENGTH = 1;
-    private const MAX_USERNAME_LENGTH = 20;
-
-    private const MIN_PASSWORD_LENGTH = 1;
-    private const MAX_PASSWORD_LENGTH = 18;
-
     public function handleRedirect() {
        if (Auth::check()) {
             return redirect("/home");
@@ -60,18 +54,14 @@ class AccountController extends Controller
     {
         return view("pages/register", [
             "page_title" => "Register",
-            "MIN_USERNAME_LENGTH" => self::MIN_USERNAME_LENGTH,
-            "MAX_USERNAME_LENGTH" => self::MAX_USERNAME_LENGTH,
-            "MIN_PASSWORD_LENGTH" => self::MIN_PASSWORD_LENGTH,
-            "MAX_PASSWORD_LENGTH" => self::MAX_PASSWORD_LENGTH
         ]);
     }
 
     public function register(Request $request)
     {
         $request->validate([
-            "username" => ["required", "unique:users,username", "min:".self::MIN_USERNAME_LENGTH, "max:".self::MAX_USERNAME_LENGTH],
-            "password" => ["required", "min:".self::MIN_PASSWORD_LENGTH, "max:".self::MAX_PASSWORD_LENGTH]
+            "username" => ["required", "unique:users,username", "min:".config("constants.MIN_USERNAME_LENGTH"), "max:".config("constants.MAX_USERNAME_LENGTH")],
+            "password" => ["required", "min:".config("constants.MIN_PASSWORD_LENGTH"), "max:".config("constants.MAX_PASSWORD_LENGTH")]
         ]);
 
         User::create([
