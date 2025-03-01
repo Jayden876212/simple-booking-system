@@ -31,7 +31,7 @@
                     <div class="mb-3">
                         <label for="bookingDate" class="form-label">Enter the date of your booking:</label>
                         <input class="form-control" value="{{ date("Y-m-d") }}" type="date" name="booking_date" id="bookingDate" required min="{{ date("Y-m-d") }}" onchange="
-                            getUnavailableTimeslots('{{ url('/bookings/get-unavailable-timeslots') }}', this.value, disableUnavailableTimeslots)
+                            getUnavailableTimeslots('{{ route('get-unavailable-timeslots') }}', this.value, disableUnavailableTimeslots)
                         ">
                     </div>
                     <div class="mb-3">
@@ -116,11 +116,11 @@
                                             Booking #{{ $booking["id"] }} - {{ $booking["timeslot_start_time"] }} {{ $booking["booking_date"] }}
                                         </p>
                                         <div class="d-flex flex-row gap-3">
-                                            <a href="{{ url()->query("/bookings/cancel", ["booking_id" => $booking["id"]]) }}">
+                                            <a href="{{ route("bookings.cancel", ["booking_id" => $booking["id"]]) }}">
                                                 <button class="btn btn-danger">
                                                     Cancel
                                                 </button>
-                                            <a href="{{ url()->query("/bookings/orders", ["booking_id" => $booking["id"]]) }}">
+                                            <a href="{{ route("orders.show", ["booking_id" => $booking["id"]]) }}">
                                                 <button class="btn btn-primary">
                                                     Order
                                                 </button>

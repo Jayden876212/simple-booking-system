@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User;
 use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Timeslot;
@@ -34,7 +33,7 @@ class BookingsController extends Controller
                 "unavailable_timeslots" => $unavailable_timeslots,
                 "orders" => $orders->toArray()
             ]
-        )->with("page_title", "Bookings");;
+        )->with("page_title", "Bookings");
     }
 
     public function makeBooking(Request $request) {

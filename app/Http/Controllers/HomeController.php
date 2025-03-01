@@ -9,7 +9,7 @@ class HomeController extends Controller
 {
     public function show(Request $request): View
     {
-        return view("pages/home")->with("page_title", "Home");
+        return view("pages.home")->with("page_title", "Home");
     }    
 
     public function handleRedirect(Request $request) {

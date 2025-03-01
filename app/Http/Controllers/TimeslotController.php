@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Models\Booking;
 
 class TimeslotController extends Controller
 {
-    public function handleRequest(Request $request) {
+    public function handleRequest(Request $request): JsonResponse {
         $chosen_booking_date = $request->booking_date ?? FALSE;
         if ($chosen_booking_date) {
             $unavailable_timeslots = Booking::getUnavailableTimeslots($chosen_booking_date);
@@ -16,6 +17,6 @@ class TimeslotController extends Controller
                 return response()->json($unavailable_timeslots_processed);
             }
         }
-        exit();
+        return response()->json([]);
     }
 }

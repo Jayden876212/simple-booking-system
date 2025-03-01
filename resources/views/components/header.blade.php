@@ -1,7 +1,7 @@
 <header>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="">Simple Booking System</a>
+            <a class="navbar-brand" href="{{ route("home") }}">Simple Booking System</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -10,7 +10,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link @if ($page_title == "Home") active @endif"
-                        href="{{ url("home") }}"
+                        href="{{ route("home") }}"
                         @if ($page_title == "Home") aria-current="page" @endif
                     >
                         Home
@@ -19,7 +19,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link @if (($page_title == "Login") or ($page_title == "Register")) active @endif"
-                        href="{{ url("account") }}"
+                        href="{{ route("accounts") }}"
                         @if (($page_title == "Login") or ($page_title == "Register")) aria-current="page" @endif
                     >
                         Account
@@ -28,7 +28,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link @if ($page_title == "Bookings") active @endif"
-                        href="{{ url("bookings") }}"
+                        href="{{ route("bookings.show") }}"
                         @if ($page_title == "Bookings") aria-current="page" @endif
                     >
                         Bookings
@@ -37,7 +37,7 @@
                 <li class="nav-item">
                     <a
                         class="nav-link @if ($page_title == "Orders") active @endif"
-                        href="{{ url("bookings/orders") }}"
+                        href="{{ route("orders.show") }}"
                         @if ($page_title == "Orders") aria-current="page" @endif
                     >
                         Orders
@@ -61,12 +61,12 @@
                 </button>
                 <ul class="dropdown-menu">
                     @auth
-                        <li><a class="dropdown-item" href="{{ url("account/logout") }}">Log Out</a></li>
-                        <li><a class="dropdown-item" href="{{ url("account/delete") }}">Delete Account</a></li>
+                        <li><a class="dropdown-item" href="{{ route("logout") }}">Log Out</a></li>
+                        <li><a class="dropdown-item" href="{{ route("account.delete") }}">Delete Account</a></li>
                     @endauth
                     @guest
-                        <li><a class="dropdown-item" href="{{ url("account/login") }}">Log In</a></li>
-                        <li><a class="dropdown-item" href="{{ url("account/register") }}">Sign Up</a></li>
+                        <li><a class="dropdown-item" href="{{ route("login.show") }}">Log In</a></li>
+                        <li><a class="dropdown-item" href="{{ route("register.show") }}">Sign Up</a></li>
                     @endguest
                 </ul>
             </div>
