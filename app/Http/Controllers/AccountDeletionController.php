@@ -22,17 +22,17 @@ class AccountDeletionController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         $user_authenticated = $this->auth->check();
-        if ($user_authenticated) {
-            $user = $this->auth->user();
-            $deleted_account = $this->accountDeletionService->deleteAccount($user);
-            if (! $deleted_account) {
-                return redirect()->route("home")->with("error", "Account deletion failed due to server error.");
-            }
-
-            $request->session()->invalidate();
-            return redirect()->route("home")->with("success", "Successfully deleted account!");
-        } else {
+        if (! $user_authenticated) {
             return redirect()->route("home")->with("error", "Account deletion failed. (You are not logged in.)");
         }
+
+        $user = $this->auth->user();
+        $deleted_account = $this->accountDeletionService->deleteAccount($user);
+        if (! $deleted_account) {
+            return redirect()->route("home")->with("error", "Account deletion failed due to server error.");
+        }
+
+        $request->session()->invalidate();
+        return redirect()->route("home")->with("success", "Successfully deleted account!");
     }
 }

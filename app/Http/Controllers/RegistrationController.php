@@ -12,11 +12,13 @@ class RegistrationController extends Controller
 {
     protected $user;
     protected $hash;
+    protected $registrationService;
 
-    public function __construct(User $user, Hash $hash)
+    public function __construct(User $user, Hash $hash, RegistrationService $registrationService)
     {
         $this->user = $user;
         $this->hash = $hash;
+        $this->registrationService = $registrationService;
     }
 
     public function showRegister(): View
@@ -31,8 +33,10 @@ class RegistrationController extends Controller
             "password" => ["required", "min:".config("constants.MIN_PASSWORD_LENGTH"), "max:".config("constants.MAX_PASSWORD_LENGTH")]
         ]);
 
-        $registrationService = new RegistrationService($this->user, $this->hash);
-        $registrationService->register($request->username, $request->password);
+        $registered_successfully = $this->registrationService->register($request->username, $request->password);
+        if (! $registered_successfully) {
+            return redirect()->route("register.show")->with("error", "Registration failed due to server error.");
+        }
 
         return redirect()->route("login.show")->with("success", "Registration successful! Please log in.");
     }
