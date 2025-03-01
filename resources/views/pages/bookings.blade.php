@@ -16,12 +16,6 @@
     }
 @endphp
 
-<ul>
-    @foreach ($orders as $order)
-        <li>{{ print_r($order) }}</li>
-    @endforeach
-</ul>
-
 <h1 class="text-center mx-auto mb-5">{{ $page_title }}</h1>
 
 <article class="container-fluid">
