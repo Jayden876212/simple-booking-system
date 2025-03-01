@@ -21,7 +21,7 @@ class BookingsController extends Controller
         $username = Auth::user()["username"];
 
         $timeslots = Timeslot::getTimeslots();
-        $bookings = Booking::getBookings(Auth::user()["username"]);
+        $bookings = Booking::getBookings($username);
         $unavailable_timeslots = Booking::getUnavailableTimeslots(date("Y-m-d"));
         $orders = Order::getOrders(Auth::id());
 
