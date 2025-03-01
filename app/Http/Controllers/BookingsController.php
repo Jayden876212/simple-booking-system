@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Booking;
+use App\Models\Order;
 use App\Models\Timeslot;
 
 class BookingsController extends Controller
@@ -17,9 +18,13 @@ class BookingsController extends Controller
             return redirect("account/login")->with("error", "User is logged out.");
         }
 
+        $username = Auth::user()["username"];
+
         $timeslots = Timeslot::getTimeslots();
         $bookings = Booking::getBookings(Auth::user()["username"]);
         $unavailable_timeslots = Booking::getUnavailableTimeslots(date("Y-m-d"));
+        $orders = Order::getOrders(Auth::id());
+
 
         return view(
             "pages/bookings",
@@ -27,8 +32,7 @@ class BookingsController extends Controller
                 "timeslots" => $timeslots,
                 "bookings" => $bookings,
                 "unavailable_timeslots" => $unavailable_timeslots,
-                "new_bookings" => User::find(Auth::id())->bookings(),
-                "new_orders" => User::find(Auth::id())->orders()
+                "orders" => $orders->toArray()
             ]
         )->with("page_title", "Bookings");;
     }

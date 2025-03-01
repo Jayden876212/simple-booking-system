@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Carbon\Traits\ToStringFormat;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
 
 use Exception;
@@ -21,10 +22,8 @@ enum OrderError: string {
 
 class Order extends Model
 {
-    protected $primaryKey = "order_id";
     protected $table = "orders";
     protected $fillable = [
-        "order_id",
         "booking_id",
         "datetime_ordered"
     ];
@@ -103,7 +102,7 @@ class Order extends Model
             ! $items_exist => OrderError::ITEM_NAMES_NOT_EXIST,
             $booking["username"] != Auth::user()["username"] => OrderError::USER_NO_PERMISSION,
             $quantity_less_than_zero => OrderError::ITEM_QUANTITY_ZERO_OR_LESS,
-            (time() < $valid_start_datetime_unix) OR (time() >= $valid_end_datetime_unix) => OrderError::BOOKING_NOT_IN_TIMESLOT,
+            // (time() < $valid_start_datetime_unix) OR (time() >= $valid_end_datetime_unix) => OrderError::BOOKING_NOT_IN_TIMESLOT,
             default => false
         };
 
@@ -116,61 +115,36 @@ class Order extends Model
             "booking_id" => $booking_id,
             "datetime_ordered" => DB::raw("NOW()")
         ]);
-        $last_insert_id = $created_order["order_id"];
+        $last_insert_id = $created_order->id;
         $rows = self::createRows($items_and_quantities, $last_insert_id);
         ItemOrder::insert($rows);
     }
 
-    public static function getOrders($username) {
-        try {
-            $get_orders = $this->database->database_handle->prepare(
-                "SELECT orders.order_id, orders.datetime_ordered, SUM(item_orders.quantity * items.price) AS total_price
-                FROM orders
-                JOIN item_orders ON orders.order_id = item_orders.order_id
-                JOIN bookings ON bookings.booking_id = orders.booking_id
-                JOIN items ON items.item_name = item_orders.item_name
-                WHERE bookings.username = :username
-                GROUP BY orders.order_id"
-            );
-            $gotten_orders = $get_orders->execute([
-                "username" => $username
-            ]);
-            if ($gotten_orders) {
-                $orders = $get_orders->fetchAll();
-                return $operation->createMessage("Successfully obtained orders.", CrudOperation::NO_ERRORS, $orders);
-            } else {
-                return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
-            }
-        } catch (PDOException $exception) {
-            return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
-        }
+    public static function getOrders($user_id) {
+        $orders = User::find($user_id)->orders()->toBase()
+        ->join("item_orders", "orders.id", "=", "item_orders.order_id")
+        ->join("items", "items.name", "=", "item_orders.item_name")
+        ->selectRaw("orders.id, MAX(orders.datetime_ordered) AS datetime_ordered, SUM(item_orders.quantity * items.price) AS total_price")
+        ->groupBy("orders.id")
+        ->get();
+
+        return $orders;
     }
 
-    public function getOrderItems($username, $order_id) {
-        $operation = new CrudOperation();
+    public static function getOrderItems($user_id, $order_id) {
+        $order = User::find($user_id)->orders()->toBase()
+        ->where("orders.id", "=", $order_id)
+        ->join("item_orders", "orders.id", "=", "item_orders.order_id")
+        ->join("items", "items.name", "=", "item_orders.item_name")
+        ->selectRaw("item_orders.item_name, SUM(item_orders.quantity) AS quantity, SUM(items.price) AS price, SUM(item_orders.quantity * items.price) AS total_price")
+        ->groupBy("item_orders.item_name")
+        ->get();
 
-        try {
-            $get_order = $this->database->database_handle->prepare(
-                "SELECT item_orders.item_name, SUM(item_orders.quantity) as quantity, SUM(items.price) as price, SUM(item_orders.quantity * items.price) AS total_price
-                FROM orders
-                JOIN item_orders ON orders.order_id = item_orders.order_id
-                JOIN bookings ON bookings.booking_id = orders.booking_id
-                JOIN items ON items.item_name = item_orders.item_name
-                WHERE (bookings.username = :username) AND (orders.order_id = :order_id)
-                GROUP BY item_orders.item_name"
-            );
-            $gotten_order = $get_order->execute([
-                "username" => $username,
-                "order_id" => $order_id
-            ]);
-            if ($gotten_order) {
-                $order = $get_order->fetchAll();
-                return $operation->createMessage("Successfully obtained order and associated items.", CrudOperation::NO_ERRORS, $order);
-            } else {
-                return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
-            }
-        } catch (PDOException $exception) {
-            return $operation->createMessage(CrudOperation::DATABASE_ERROR, CrudOperation::DATABASE_ERROR);
-        }
+        return $order;
+    }
+
+    public function items(): BelongsToMany
+    {
+        return $this->belongsToMany(Item::class, "item_orders");
     }
 }

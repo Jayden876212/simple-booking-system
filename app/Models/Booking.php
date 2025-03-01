@@ -23,7 +23,6 @@ enum BookingError: string {
 
 class Booking extends Model
 {
-    protected $primaryKey = "booking_id";
     protected $table = "bookings";
     protected $fillable = [
         "timeslot_start_time",
@@ -70,7 +69,7 @@ class Booking extends Model
 
     public static function getUnavailableTimeslots($booking_date) {
         $unavailable_timeslots = Booking::selectRaw(
-            "COUNT(booking_id) AS number_of_tables_booked, timeslot_start_time"
+            "COUNT(id) AS number_of_tables_booked, timeslot_start_time"
         )->where("booking_date", $booking_date)
         ->groupBy("timeslot_start_time")
         ->having("number_of_tables_booked", ">=", 10)
@@ -81,7 +80,7 @@ class Booking extends Model
 
     public static function getBookings($username) {
         $bookings = Booking::select(
-            "booking_id", "timeslot_start_time", "booking_date"
+            "id", "timeslot_start_time", "booking_date"
         )->where([
             ["booking_date", ">=", DB::raw("CURDATE()")],
             ["username", $username]
@@ -92,15 +91,15 @@ class Booking extends Model
 
     public static function getBooking($booking_id) {
         $booking = Booking::get(
-            ["booking_id", "timeslot_start_time", "booking_date", "username"]
-        )->where("booking_id", $booking_id)->sole();
+            ["id", "timeslot_start_time", "booking_date", "username"]
+        )->where("id", $booking_id)->sole();
 
         return $booking;
     }
     
     public static function cancelBooking($booking_id, $username) {
         $booking_to_be_cancelled = Booking::where([
-            ["booking_id", $booking_id],
+            ["id", $booking_id],
             ["username", $username]
         ]);
         $booking_to_be_cancelled->delete();

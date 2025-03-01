@@ -16,15 +16,9 @@
     }
 @endphp
 
-
 <ul>
-    @foreach ($new_bookings->get() as $new_booking)
-        <li>{{ print_r($new_booking->toArray()) }}</li>
-    @endforeach
-</ul>
-<ul>
-    @foreach ($new_orders->get() as $new_order)
-        <li>{{ print_r($new_order->toArray()) }}</li>
+    @foreach ($orders as $order)
+        <li>{{ print_r($order) }}</li>
     @endforeach
 </ul>
 
@@ -125,14 +119,14 @@
                                 @foreach ($bookings as $booking)
                                     <li class="list-group-item d-flex flex-row justify-content-between">
                                         <p>
-                                            Booking #{{ $booking["booking_id"] }} - {{ $booking["timeslot_start_time"] }} {{ $booking["booking_date"] }}
+                                            Booking #{{ $booking["id"] }} - {{ $booking["timeslot_start_time"] }} {{ $booking["booking_date"] }}
                                         </p>
                                         <div class="d-flex flex-row gap-3">
-                                            <a href="{{ url()->query("/bookings/cancel", ["booking_id" => $booking["booking_id"]]) }}">
+                                            <a href="{{ url()->query("/bookings/cancel", ["booking_id" => $booking["id"]]) }}">
                                                 <button class="btn btn-danger">
                                                     Cancel
                                                 </button>
-                                            <a href="{{ url()->query("/bookings/orders", ["booking_id" => $booking["booking_id"]]) }}">
+                                            <a href="{{ url()->query("/bookings/orders", ["booking_id" => $booking["id"]]) }}">
                                                 <button class="btn btn-primary">
                                                     Order
                                                 </button>

@@ -48,12 +48,12 @@
                                     </option>
                                     @foreach ($bookings as $booking)
                                         <option
-                                            value="{{ $booking["booking_id"] }}"
-                                            @if ($booking["booking_id"] == $booking_id)
+                                            value="{{ $booking["id"] }}"
+                                            @if ($booking["id"] == $booking_id)
                                                 selected
                                             @endif
                                         >
-                                            Booking #{{ $booking["booking_id"] }} ({{ $booking["booking_date"] }} {{ $booking["timeslot_start_time"] }})
+                                            Booking #{{ $booking["id"] }} ({{ $booking["booking_date"] }} {{ $booking["timeslot_start_time"] }})
                                         </option>
                                     @endforeach
                                 @endif
@@ -80,16 +80,16 @@
                                         @if (isset($items))
                                             @if (is_object($items))
                                                 @foreach ($items as $item)
-                                                    <tr id="{{ $item["item_name"] }}" class="item-product">
+                                                    <tr id="{{ $item["name"] }}" class="item-product">
                                                         <th scope="row" class="col-md-3">
-                                                            <p class="item-name" id="name_of_{{ $item["item_name"] }}">{{ $item["item_name"] }}</p>
+                                                            <p class="item-name" id="name_of_{{ $item["name"] }}">{{ $item["name"] }}</p>
                                                         </th>
                                                         <td class="col-md-3">
                                                             <p>
                                                                 £<i
                                                                     class="item-price"
-                                                                    id="price_of_{{ $item["item_name"] }}"
-                                                                    title="Price of {{ $item["item_name"] }}"
+                                                                    id="price_of_{{ $item["name"] }}"
+                                                                    title="Price of {{ $item["name"] }}"
                                                                 >
                                                                     {{ $item["price"] }}
                                                                 </i>
@@ -99,19 +99,19 @@
                                                             <input
                                                                 class="item-quantity form-control"
                                                                 type="number"
-                                                                id="quantity_of_{{ $item["item_name"] }}"
-                                                                name="quantity_of_{{ $item["item_name"] }}"
+                                                                id="quantity_of_{{ $item["name"] }}"
+                                                                name="quantity_of_{{ $item["name"] }}"
                                                                 value="0"
                                                                 onchange="updateItems()"
-                                                                title="Select the amount of {{ $item["item_name"] }}(s) that you want"
+                                                                title="Select the amount of {{ $item["name"] }}(s) that you want"
                                                             >
                                                         </td>
                                                         <td class="col-md-3">
                                                             <p>
                                                                 £<i
                                                                     class="item-total"
-                                                                    id="total_of_{{ $item["item_name"] }}"
-                                                                    title="Total price of {{ $item["item_name"] }}"
+                                                                    id="total_of_{{ $item["name"] }}"
+                                                                    title="Total price of {{ $item["name"] }}"
                                                                 >
                                                                     0
                                                                 </i>
@@ -176,31 +176,31 @@
                                     @foreach ($orders as $order)
                                         <tr>
                                             <th scope="row">
-                                                #{{ $order["order_id"] }}
+                                                #{{ $order->id }}
                                             </th>
                                             <td>
-                                                {{ $order["datetime_ordered"] }}
+                                                {{ $order->datetime_ordered }}
                                             </td>
                                             <td>
-                                                £{{ $order["total_price"] }}
+                                                £{{ $order->total_price }}
                                             </td>
                                             <td>
                                                 <!-- Button trigger modal -->
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderDetails_{{ $order["order_id"] }}">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderDetails_{{ $order->id }}">
                                                     View
                                                 </button>
 
                                                 <!-- Modal -->
-                                                <div class="modal fade" id="orderDetails_{{ $order["order_id"] }}" tabindex="-1" aria-labelledby="orderDetailsLabel_{{ $order["order_id"] }}" aria-hidden="true">
+                                                <div class="modal fade" id="orderDetails_{{ $order->id }}" tabindex="-1" aria-labelledby="orderDetailsLabel_{{ $order->id }}" aria-hidden="true">
                                                     <div class="modal-dialog modal-dialog-centered modal-lg">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h3 class="modal-title fs-5" id="orderDetailsLabel_{{ $order["order_id"] }}">View Order #{{ $order["order_id"] }}</h3>
+                                                                <h3 class="modal-title fs-5" id="orderDetailsLabel_{{ $order->id }}">View Order #{{ $order->id }}</h3>
                                                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                             </div>
                                                             <div class="modal-body">
                                                                 @php
-                                                                    $order_summary = $orders_and_items[$order["order_id"]];
+                                                                    $order_summary = $orders_and_items[$order->id];
                                                                 @endphp
                                                                 @foreach ($order_summary as $item)
                                                                     <ul class="list-group m-3">
@@ -209,7 +209,7 @@
                                                                                 Item Name:
                                                                             </p>
                                                                             <b>
-                                                                                {{ $item["item_name"] }}
+                                                                                {{ $item->item_name }}
                                                                             </b>
                                                                         </li>
                                                                         <li class="list-group-item d-flex flex-row justify-content-between">
@@ -217,7 +217,7 @@
                                                                                 Price:
                                                                             </p>
                                                                             <i>
-                                                                                {{ $item["price"] }}
+                                                                                {{ $item->price }}
                                                                             </i>
                                                                         </li>
                                                                         <li class="list-group-item d-flex flex-row justify-content-between">
@@ -225,7 +225,7 @@
                                                                                 Quantity:
                                                                             </p>
                                                                             <i>
-                                                                                {{ $item["quantity"] }}
+                                                                                {{ $item->quantity }}
                                                                             </i>
                                                                         </li>
                                                                         <li class="list-group-item d-flex flex-row justify-content-between">
@@ -233,7 +233,7 @@
                                                                                 Total Price:
                                                                             </p>
                                                                             <i>
-                                                                                {{ $item["total_price"] }}
+                                                                                {{ $item->total_price }}
                                                                             </i>
                                                                         </li>
                                                                     </ul>

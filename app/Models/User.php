@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -41,6 +42,6 @@ class User extends Authenticatable
 
     public function orders(): HasManyThrough
     {
-        return $this->hasManyThrough(Order::class, Booking::class, "booking_id", "booking_id", "username", "username");
+        return $this->hasManyThrough(Order::class, Booking::class, firstKey: "username", localKey: "username");
     }
 }
