@@ -63,7 +63,7 @@
                                 active
                             @endif
                         "
-                        href="{{ url("orders") }}"
+                        href="{{ url("bookings/orders") }}"
                         @if ($page_title == "Orders")
                             aria-current="page"
                         @endif
