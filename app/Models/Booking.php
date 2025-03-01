@@ -8,6 +8,7 @@ use App\Models\Timeslot;
 use DateTime;
 use Exception;
 use DB;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 enum BookingError: string {
     case BOOKING_DATE_EMPTY = "Booking date is empty."; // Presence check
@@ -90,9 +91,9 @@ class Booking extends Model
     }
 
     public static function getBooking($booking_id) {
-        $booking = Booking::select(
-            "booking_id", "timeslot_start_time", "booking_date", "username"
-        )->where("booking_id", $booking_id)->get();
+        $booking = Booking::get(
+            ["booking_id", "timeslot_start_time", "booking_date", "username"]
+        )->where("booking_id", $booking_id)->sole();
 
         return $booking;
     }
@@ -105,5 +106,10 @@ class Booking extends Model
         $booking_to_be_cancelled->delete();
 
         return $booking_to_be_cancelled;
+    }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class);
     }
 }

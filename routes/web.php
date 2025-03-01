@@ -5,6 +5,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BookingsController;
 use App\Http\Controllers\TimeslotController;
+use App\Http\Controllers\OrdersController;
 
 // Home/Landing Page
 Route::get("/", [HomeController::class, "show"]);
@@ -27,3 +28,7 @@ Route::get("/bookings", [BookingsController::class, "showBookings"]);
 Route::post("/bookings", [BookingsController::class, "makeBooking"]);
 Route::get("/bookings/get-unavailable-timeslots", [TimeslotController::class, "handleRequest"]);
 Route::get("/bookings/cancel", [BookingsController::class, "cancelBooking"]);
+
+// Orders Pages
+Route::get("/bookings/orders", [OrdersController::class, "showOrders"]);
+Route::post("/bookings/orders", [OrdersController::class, "makeOrder"]);

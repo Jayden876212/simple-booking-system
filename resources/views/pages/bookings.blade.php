@@ -1,5 +1,9 @@
 @extends("layouts.default", ["page_title" => $page_title])
 
+@section("scripts")
+<script src="{{ asset("js/timeslots.js") }}" type="text/javascript"></script>
+@stop
+
 @section("content")
 
 @section("title", $page_title)
@@ -11,6 +15,18 @@
         case AVAILABLE;
     }
 @endphp
+
+
+<ul>
+    @foreach ($new_bookings->get() as $new_booking)
+        <li>{{ print_r($new_booking->toArray()) }}</li>
+    @endforeach
+</ul>
+<ul>
+    @foreach ($new_orders->get() as $new_order)
+        <li>{{ print_r($new_order->toArray()) }}</li>
+    @endforeach
+</ul>
 
 <h1 class="text-center mx-auto mb-5">{{ $page_title }}</h1>
 

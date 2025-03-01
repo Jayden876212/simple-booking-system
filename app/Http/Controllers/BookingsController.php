@@ -22,11 +22,13 @@ class BookingsController extends Controller
         $unavailable_timeslots = Booking::getUnavailableTimeslots(date("Y-m-d"));
 
         return view(
-            "pages/booking",
+            "pages/bookings",
             [
                 "timeslots" => $timeslots,
                 "bookings" => $bookings,
-                "unavailable_timeslots" => $unavailable_timeslots
+                "unavailable_timeslots" => $unavailable_timeslots,
+                "new_bookings" => User::find(Auth::id())->bookings(),
+                "new_orders" => User::find(Auth::id())->orders()
             ]
         )->with("page_title", "Bookings");;
     }
