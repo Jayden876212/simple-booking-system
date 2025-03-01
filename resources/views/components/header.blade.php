@@ -9,64 +9,36 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a
-                        class="
-                            nav-link
-                            @if ($page_title == "Home")
-                                active
-                            @endif
-                        "
+                        class="nav-link @if ($page_title == "Home") active @endif"
                         href="{{ url("home") }}"
-                        @if ($page_title == "Home")
-                            aria-current="page"
-                        @endif
+                        @if ($page_title == "Home") aria-current="page" @endif
                     >
                         Home
                     </a>
                 </li>
                 <li class="nav-item">
                     <a
-                        class="
-                            nav-link
-                            @if (($page_title == "Login") or ($page_title == "Register"))
-                                active
-                            @endif
-                        "
+                        class="nav-link @if (($page_title == "Login") or ($page_title == "Register")) active @endif"
                         href="{{ url("account") }}"
-                        @if (($page_title == "Login") or ($page_title == "Register"))
-                            aria-current="page"
-                        @endif
+                        @if (($page_title == "Login") or ($page_title == "Register")) aria-current="page" @endif
                     >
                         Account
                     </a>
                 </li>
                 <li class="nav-item">
                     <a
-                        class="
-                            nav-link
-                            @if ($page_title == "Bookings")
-                                active
-                            @endif
-                        "
+                        class="nav-link @if ($page_title == "Bookings") active @endif"
                         href="{{ url("bookings") }}"
-                        @if ($page_title == "Bookings")
-                            aria-current="page"
-                        @endif
+                        @if ($page_title == "Bookings") aria-current="page" @endif
                     >
                         Bookings
                     </a>
                 </li>
                 <li class="nav-item">
                     <a
-                        class="
-                            nav-link
-                            @if ($page_title == "Orders")
-                                active
-                            @endif
-                        "
+                        class="nav-link @if ($page_title == "Orders") active @endif"
                         href="{{ url("bookings/orders") }}"
-                        @if ($page_title == "Orders")
-                            aria-current="page"
-                        @endif
+                        @if ($page_title == "Orders") aria-current="page" @endif
                     >
                         Orders
                     </a>
@@ -75,14 +47,7 @@
             <div class="btn-group dropstart">
                 <button
                     type="button"
-                    class="btn 
-                        @auth
-                            btn-success
-                        @endauth
-                        @guest
-                            btn-outline-secondary
-                        @endguest
-                    dropdown-toggle"
+                    class="btn @auth btn-success @endauth @guest btn-outline-secondary @endguest dropdown-toggle"
                     data-bs-toggle="dropdown" aria-expanded="false"
                 >
                     @auth
