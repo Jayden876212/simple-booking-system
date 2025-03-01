@@ -17,7 +17,7 @@ class RegistrationService
         $this->hash = $hash;
     }
 
-    public function register($username, $password)
+    public function register(string $username, string $password)
     {
         try {
             $this->user->create([

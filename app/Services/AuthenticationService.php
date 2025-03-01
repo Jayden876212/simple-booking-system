@@ -13,7 +13,7 @@ class AuthenticationService
         $this->auth = $auth;
     }
 
-    public function authenticate($username, $password) :bool
+    public function authenticate(string $username, string $password) :bool
     {
         $credentials = [
             "username" => $username,
