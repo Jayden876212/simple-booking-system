@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2025 at 11:01 PM
+-- Generation Time: Mar 01, 2025 at 05:40 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -28,7 +28,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `bookings` (
-  `booking_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `timeslot_start_time` time NOT NULL,
   `username` varchar(255) NOT NULL,
   `booking_date` date NOT NULL
@@ -38,8 +38,8 @@ CREATE TABLE `bookings` (
 -- Dumping data for table `bookings`
 --
 
-INSERT INTO `bookings` (`booking_id`, `timeslot_start_time`, `username`, `booking_date`) VALUES
-(25, '09:00:00', 'jayden', '2025-03-02');
+INSERT INTO `bookings` (`id`, `timeslot_start_time`, `username`, `booking_date`) VALUES
+(1, '11:00:00', 'jayden', '2025-03-02');
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE `failed_jobs` (
 --
 
 CREATE TABLE `items` (
-  `item_name` varchar(20) NOT NULL,
+  `name` varchar(20) NOT NULL,
   `description` text NOT NULL,
   `price` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -97,7 +97,7 @@ CREATE TABLE `items` (
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`item_name`, `description`, `price`) VALUES
+INSERT INTO `items` (`name`, `description`, `price`) VALUES
 ('Hamburger', 'A hamburger, or simply a burger, is a dish consisting of fillings—usually a patty of ground meat, typically beef—placed inside a sliced bun or bread roll. The patties are often served with cheese, lettuce, tomato, onion, pickles, bacon, or chilis with condiments such as ketchup, mustard, mayonnaise, relish or a \"special sauce\", often a variation of Thousand Island dressing, and are frequently placed on sesame seed buns. A hamburger patty topped with cheese is called a cheeseburger.[1] Under some definitions, and in some cultures, a burger is considered a sandwich.', 20),
 ('Pasta', 'Pasta (UK: /ˈpæstə/, US: /ˈpɑːstə/; Italian: [ˈpasta]) is a type of food typically made from an unleavened dough of wheat flour mixed with water or eggs, and formed into sheets or other shapes, then cooked by boiling or baking. Pasta was originally only made with durum, although the definition has been expanded to include alternatives for a gluten-free diet, such as rice flour, or legumes such as beans or lentils. Pasta is believed to have developed independently in Italy and is a staple food of Italian cuisine,[1][2] with evidence of Etruscans making pasta as early as 400 BCE in Italy.', 50),
 ('Rice', 'Rice is a cereal grain and in its domesticated form is the staple food of over half of the world\'s population, particularly in Asia and Africa. Rice is the seed of the grass species Oryza sativa (Asian rice)—or, much less commonly, Oryza glaberrima (African rice). Asian rice was domesticated in China some 13,500 to 8,200 years ago; African rice was domesticated in Africa about 3,000 years ago.', 15);
@@ -109,11 +109,24 @@ INSERT INTO `items` (`item_name`, `description`, `price`) VALUES
 --
 
 CREATE TABLE `item_orders` (
-  `item_order_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `item_name` varchar(20) NOT NULL,
   `order_id` int(11) NOT NULL,
   `quantity` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `item_orders`
+--
+
+INSERT INTO `item_orders` (`id`, `item_name`, `order_id`, `quantity`) VALUES
+(1, 'Hamburger', 2, 2),
+(2, 'Rice', 2, 1),
+(3, 'Hamburger', 3, 3),
+(4, 'Rice', 3, 1),
+(5, 'Pasta', 4, 1),
+(6, 'Hamburger', 5, 1),
+(7, 'Pasta', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -178,10 +191,21 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 --
 
 CREATE TABLE `orders` (
-  `order_id` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `booking_id` int(11) NOT NULL,
   `datetime_ordered` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `booking_id`, `datetime_ordered`) VALUES
+(1, 1, '2025-03-01 14:52:41'),
+(2, 1, '2025-03-01 14:53:18'),
+(3, 1, '2025-03-01 16:18:30'),
+(4, 1, '2025-03-01 16:18:54'),
+(5, 1, '2025-03-01 16:39:13');
 
 -- --------------------------------------------------------
 
@@ -203,7 +227,7 @@ CREATE TABLE `sessions` (
 --
 
 INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
-('tyIwsc1tyKiTNjXh3etvmPcSpm0Ho1Gl2INdbfp5', 6, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiMzFaRkpXYW03MVZ0ZnJJdnFCWFRHV2JLT3FXelVFRmw0RGpGMlp5RCI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJuZXciO2E6MDp7fXM6Mzoib2xkIjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NDU6Imh0dHA6Ly9sb2NhbGhvc3Qvc2ltcGxlLWJvb2tpbmctc3lzdGVtL3B1YmxpYyI7fXM6NTA6ImxvZ2luX3dlYl81OWJhMzZhZGRjMmIyZjk0MDE1ODBmMDE0YzdmNThlYTRlMzA5ODlkIjtpOjY7fQ==', 1740779457);
+('OCGLn5yuF9FF95KNhl1UcFGOmKkwVhlgOmhLsE5E', 6, '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0', 'YTo0OntzOjY6Il90b2tlbiI7czo0MDoiV1QwSjJUdHFoU2xxc0dhOTNHb1hvcHpzNzFPVmNEWmdQVEw2dkxNZCI7czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6NjE6Imh0dHA6Ly9sb2NhbGhvc3Qvc2ltcGxlLWJvb2tpbmctc3lzdGVtL3B1YmxpYy9ib29raW5ncy9vcmRlcnMiO31zOjY6Il9mbGFzaCI7YToyOntzOjM6Im9sZCI7YTowOnt9czozOiJuZXciO2E6MDp7fX1zOjUwOiJsb2dpbl93ZWJfNTliYTM2YWRkYzJiMmY5NDAxNTgwZjAxNGM3ZjU4ZWE0ZTMwOTg5ZCI7aTo2O30=', 1740847153);
 
 -- --------------------------------------------------------
 
@@ -257,7 +281,7 @@ INSERT INTO `users` (`id`, `username`, `password`) VALUES
 -- Indexes for table `bookings`
 --
 ALTER TABLE `bookings`
-  ADD PRIMARY KEY (`booking_id`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `booking_username` (`username`),
   ADD KEY `booking_timeslot` (`timeslot_start_time`);
 
@@ -284,13 +308,13 @@ ALTER TABLE `failed_jobs`
 -- Indexes for table `items`
 --
 ALTER TABLE `items`
-  ADD PRIMARY KEY (`item_name`);
+  ADD PRIMARY KEY (`name`);
 
 --
 -- Indexes for table `item_orders`
 --
 ALTER TABLE `item_orders`
-  ADD PRIMARY KEY (`item_order_id`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `on_item` (`item_name`),
   ADD KEY `on_order` (`order_id`);
 
@@ -317,7 +341,7 @@ ALTER TABLE `migrations`
 -- Indexes for table `orders`
 --
 ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`),
+  ADD PRIMARY KEY (`id`),
   ADD KEY `order_for_booking` (`booking_id`);
 
 --
@@ -349,7 +373,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `booking_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `failed_jobs`
@@ -361,7 +385,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `item_orders`
 --
 ALTER TABLE `item_orders`
-  MODIFY `item_order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=81;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `jobs`
@@ -379,7 +403,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
@@ -402,14 +426,14 @@ ALTER TABLE `bookings`
 -- Constraints for table `item_orders`
 --
 ALTER TABLE `item_orders`
-  ADD CONSTRAINT `on_item` FOREIGN KEY (`item_name`) REFERENCES `items` (`item_name`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `on_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `on_item` FOREIGN KEY (`item_name`) REFERENCES `items` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `on_order` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `orders`
 --
 ALTER TABLE `orders`
-  ADD CONSTRAINT `order_for_booking` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`booking_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `order_for_booking` FOREIGN KEY (`booking_id`) REFERENCES `bookings` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
