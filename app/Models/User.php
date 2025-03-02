@@ -44,4 +44,12 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(Order::class, Booking::class, firstKey: "username", localKey: "username");
     }
+
+    public function rules(): array
+    {
+        return [
+            "username" => ["required"],
+            "password" => ["required"]
+        ];
+    }
 }

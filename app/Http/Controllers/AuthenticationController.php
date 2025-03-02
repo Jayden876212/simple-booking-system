@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -34,16 +35,11 @@ class AuthenticationController extends Controller
         return view("pages.login", ["page_title" => "Login"]);
     }
 
-    public function login(Request $request): RedirectResponse
+    public function login(LoginRequest $request): RedirectResponse
     {
         if ($this->auth->check()) {
             return redirect()->route("home")->with('error', 'Error - account already logged in.');
         }
-
-        $request->validate([
-            "username" => ["required"],
-            "password" => ["required"]
-        ]);
 
         $credentials = [
             "username" => $request["username"],
