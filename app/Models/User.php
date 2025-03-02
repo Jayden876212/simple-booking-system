@@ -48,8 +48,8 @@ class User extends Authenticatable
     public function rules(): array
     {
         return [
-            "username" => ["required"],
-            "password" => ["required"]
+            "username" => ["required", "unique:users,username", "min:".config("constants.MIN_USERNAME_LENGTH"), "max:".config("constants.MAX_USERNAME_LENGTH")],
+            "password" => ["required", "min:".config("constants.MIN_PASSWORD_LENGTH"), "max:".config("constants.MAX_PASSWORD_LENGTH")]
         ];
     }
 }

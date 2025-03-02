@@ -3,10 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class RegistrationRequest extends FormRequest
 {
     protected $user;
 
@@ -32,9 +32,6 @@ class LoginRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            "username" => "required",
-            "password" => "required"
-        ];
+        return $this->user->rules();
     }
 }
