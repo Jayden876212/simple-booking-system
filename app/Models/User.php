@@ -3,12 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Hash;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class User extends Authenticatable
 {
@@ -51,5 +53,12 @@ class User extends Authenticatable
             "username" => ["required", "unique:users,username", "min:".config("constants.MIN_USERNAME_LENGTH"), "max:".config("constants.MAX_USERNAME_LENGTH")],
             "password" => ["required", "min:".config("constants.MIN_PASSWORD_LENGTH"), "max:".config("constants.MAX_PASSWORD_LENGTH")]
         ];
+    }
+
+    protected function password(): Attribute
+    {
+        return Attribute::make(
+            set: fn (string $value) => Hash::make($value)
+        );
     }
 }
