@@ -2,33 +2,33 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-
-use App\Services\AccountDeletionService;
+use Throwable;
 
 class AccountDeletionController extends Controller
 {
     protected $auth;
-    protected $accountDeletionService;
+    protected $user;
 
-    public function __construct(Guard $auth, AccountDeletionService $accountDeletionService)
+    public function __construct(Guard $auth)
     {
         $this->auth = $auth;
-        $this->accountDeletionService = $accountDeletionService;
+        $this->user = $auth->user();
     }
 
-    public function delete(Request $request): RedirectResponse
+    public function deleteAccount(Request $request): RedirectResponse
     {
         $user_authenticated = $this->auth->check();
         if (! $user_authenticated) {
             return redirect()->route("home")->with("error", "Account deletion failed. (You are not logged in.)");
         }
 
-        $user = $this->auth->user();
-        $deleted_account = $this->accountDeletionService->deleteAccount($user);
-        if (! $deleted_account) {
+        try {
+            $this->user->delete();
+        } catch (Throwable $caught) {
             return redirect()->route("home")->with("error", "Account deletion failed due to server error.");
         }
 
