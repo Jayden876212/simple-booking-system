@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\AuthenticationService;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,14 +10,14 @@ use Illuminate\View\View;
 class AuthenticationController extends Controller
 {
     protected $auth;
-    protected $authenticationService;
 
-    public function __construct(Guard $auth, AuthenticationService $authenticationService) {
+    public function __construct(Guard $auth)
+    {
         $this->auth = $auth;
-        $this->authenticationService = $authenticationService;
     }
 
-    public function handleRedirect(): RedirectResponse {
+    public function handleRedirect(): RedirectResponse
+    {
         if ($this->auth->check()) {
             return redirect()->route("home");
         } else {
@@ -45,7 +44,14 @@ class AuthenticationController extends Controller
             "username" => ["required"],
             "password" => ["required"]
         ]);
-        $authenticated_successfully = $this->authenticationService->authenticate($request["username"], $request["password"]);
+
+        $credentials = [
+            "username" => $request["username"],
+            "password" => $request["password"]
+        ];
+
+        $authenticated_successfully = $this->auth->attempt($credentials);
+
         if (! $authenticated_successfully) {
             return back()->withErrors([
                 "password" => "Credentials do not match"
@@ -62,7 +68,7 @@ class AuthenticationController extends Controller
         if (! $this->auth->check()) {
             return redirect()->route("home")->with("error", "Logout failed. (You are not logged in.)");
         }
-        $request->session()->invalidate();
+        $this->auth->logout();
 
         return redirect()->route("home")->with("success", "Logout successfull!");
     }
