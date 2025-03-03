@@ -131,13 +131,21 @@ class Order extends Model
         return $orders;
     }
 
-    public static function getOrderItems($user_id, $order_id) {
+    public function getOrderItems($user_id, $order_id, Item $item, ItemOrder $itemOrder) {
+        $items = $item->getTable();
+        $item_orders = $itemOrder->getTable();
+        $orders = $this->getTable();
+
         $order = User::find($user_id)->orders()->toBase()
-        ->where("orders.id", "=", $order_id)
-        ->join("item_orders", "orders.id", "=", "item_orders.order_id")
-        ->join("items", "items.name", "=", "item_orders.item_name")
-        ->selectRaw("item_orders.item_name, SUM(item_orders.quantity) AS quantity, SUM(items.price) AS price, SUM(item_orders.quantity * items.price) AS total_price")
-        ->groupBy("item_orders.item_name")
+        ->where("$orders.id", "=", $order_id)
+        ->join($item_orders, "$orders.id", "=", "$item_orders.order_id")
+        ->join($items, "$items.name", "=", "$item_orders.item_name")
+        ->selectRaw(
+            "$item_orders.item_name,
+            SUM($item_orders.quantity) AS quantity,
+            SUM($items.price) AS price,
+            SUM($item_orders.quantity * $items.price) AS total_price"
+        )->groupBy("$item_orders.item_name")
         ->get();
 
         return $order;

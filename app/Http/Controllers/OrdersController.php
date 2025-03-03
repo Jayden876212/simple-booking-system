@@ -10,16 +10,24 @@ use App\Models\User;
 use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Item;
+use App\Models\ItemOrder;
 
 class OrdersController extends Controller
 {
     protected $auth;
     protected $user;
+    protected $order;
+    protected $item;
+    protected $itemOrder;
 
-    public function __construct(Guard $auth)
+    public function __construct(Guard $auth, Order $order, Item $item, ItemOrder $itemOrder)
     {
         $this->auth = $auth;
         $this->user = $auth->user();
+
+        $this->order = $order;
+        $this->item = $item;
+        $this->itemOrder = $itemOrder;
     }
 
     public function showOrders(Request $request) {
@@ -37,7 +45,12 @@ class OrdersController extends Controller
         if (isset($orders)) {
             foreach ($orders as $order) {
                 $order = (array) $order;
-                $orders_and_items[$order["id"]] = Order::getOrderItems(Auth::id(), $order["id"]);
+                $orders_and_items[$order["id"]] = $this->order->getOrderItems(
+                    Auth::id(),
+                    $order["id"],
+                    $this->item,
+                    $this->itemOrder
+                );
             }
         }
 
