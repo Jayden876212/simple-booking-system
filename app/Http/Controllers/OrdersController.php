@@ -36,7 +36,7 @@ class OrdersController extends Controller
 
     public function showOrders(Request $request) {
         if (! Auth::check()) {
-            return redirect("account/login")->with("error", "You must be logged in to an account to make an order.");
+            return redirect()->route("login.show")->with("error", "You must be logged in to an account to make an order.");
         }
 
         $booking_id = $request->booking_id ?? FALSE;
@@ -77,11 +77,8 @@ class OrdersController extends Controller
 
         if ($submit_button_pressed) {
             $this->order->orderItems($booking_id, $items_and_quantities);
-            return redirect("/bookings/orders")->with("success", "Successfully ordered items.");
+            return redirect()->route("orders.show")->with("success", "Successfully ordered items.");
         }
-
-        require "views/orders.php";
-        exit();
     }
 
     private function sortItems(Request $request, $items) {
