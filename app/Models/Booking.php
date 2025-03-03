@@ -32,7 +32,6 @@ class Booking extends Model
     public $timestamps = false;
 
     public static function createBooking($timeslot_start_time, $booking_date, $username) {
-        $existing_timeslot = Timeslot::getTimeslot($timeslot_start_time);
         $unavailable_timeslots = self::getUnavailableTimeslots($booking_date);
         $specific_timeslot_unavailable = FALSE;
         foreach ($unavailable_timeslots as $unavailable_timeslot) {
@@ -42,20 +41,8 @@ class Booking extends Model
             }
         }
 
-        $error = match(true) {
-            $booking_date == "" => BookingError::BOOKING_DATE_EMPTY,
-            $timeslot_start_time == "" => BookingError::TIMESLOT_START_TIME_EMPTY,
-            DateTime::createFromFormat("Y-m-d", $booking_date) == FALSE => BookingError::BOOKING_DATE_INCORRECT_FORMAT,
-            DateTime::createFromFormat("H:i:s", $timeslot_start_time) == FALSE => BookingError::TIMESLOT_INCORRECT_FORMAT,
-            (strtotime($booking_date) < time()) AND ($booking_date != date("Y-m-d")) => BookingError::BOOKING_DATE_IN_PAST,
-            time() > strtotime(date("$booking_date $timeslot_start_time")) => BookingError::TIMESLOT_IN_PAST,
-            isset($existing_timeslot) ? FALSE : TRUE => BookingError::TIMESLOT_NOT_EXIST,
-            $specific_timeslot_unavailable => BookingError::UNAVAILABLE_TIMESLOT,
-            default => false
-        };
-
-        if ($error) {
-            throw new Exception($error->value, 1);
+        if ($specific_timeslot_unavailable) {
+            throw new Exception(BookingError::UNAVAILABLE_TIMESLOT->value, 1);
         }
 
         $booking = Booking::create([
