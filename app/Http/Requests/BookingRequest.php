@@ -2,16 +2,25 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 
 class BookingRequest extends FormRequest
 {
+    protected $auth;    
+
+    public function __construct(Guard $auth) {
+        $this->auth = $auth;
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        $user_logged_in = $this->auth->check();
+
+        return $user_logged_in;
     }
 
     /**
