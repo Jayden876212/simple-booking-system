@@ -10,17 +10,6 @@ use Exception;
 use DB;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-enum BookingError: string {
-    case BOOKING_DATE_EMPTY = "Booking date is empty."; // Presence check
-    case TIMESLOT_START_TIME_EMPTY = "Timeslot is empty."; // Presence check
-    case BOOKING_DATE_INCORRECT_FORMAT = "Booking date is in the incorrect format (must be YYYY-MM-DD)"; // Format check
-    case TIMESLOT_INCORRECT_FORMAT = "Timeslot is in the incorrect format (must be HH:mm:ss)"; // Format check
-    case BOOKING_DATE_IN_PAST = "Booking date is in the past"; // Consistency check
-    case TIMESLOT_IN_PAST = "Booking date is today but timeslot is in the past"; // Consistency check
-    case TIMESLOT_NOT_EXIST = "The timeslot is not available from the selection menu"; // Look up check
-    case UNAVAILABLE_TIMESLOT = "Timeslot is unavailable (there cannot be more than 10 tables booked in a given timeslot)"; // Look up check
-}
-
 class Booking extends Model
 {
     protected $table = "bookings";
