@@ -19,7 +19,8 @@ class Booking extends Model
     ];
     public $timestamps = false;
 
-    public static function createBooking(string $timeslot_start_time, string $booking_date, User|Authenticatable $user): Booking {
+    public static function createBooking(string $timeslot_start_time, string $booking_date, User|Authenticatable $user): Booking
+    {
         $username = $user["username"];
 
         $booking = self::create([
@@ -31,7 +32,8 @@ class Booking extends Model
         return $booking;
     }
 
-    public static function getUnavailableTimeslots(string $booking_date): Collection {
+    public static function getUnavailableTimeslots(string $booking_date): Collection
+    {
         $unavailable_timeslots = self::selectRaw(
             "COUNT(id) AS number_of_tables_booked, timeslot_start_time"
         )->where("booking_date", $booking_date)
@@ -42,7 +44,8 @@ class Booking extends Model
         return $unavailable_timeslots;
     }
 
-    public static function getBookings(User|Authenticatable $user): Collection {
+    public static function getBookings(User|Authenticatable $user): Collection
+    {
         $username = $user["username"];
 
         $bookings = self::select(
@@ -55,7 +58,8 @@ class Booking extends Model
         return $bookings;
     }
 
-    public static function getBooking(string $booking_id): Booking {
+    public static function getBooking(string $booking_id): Booking
+    {
         $booking = self::get(
             ["id", "timeslot_start_time", "booking_date", "username"]
         )->where("id", $booking_id)->sole();
@@ -63,7 +67,8 @@ class Booking extends Model
         return $booking;
     }
     
-    public static function cancelBooking(string $booking_id) {
+    public static function cancelBooking(string $booking_id)
+    {
         $booking_to_be_cancelled = self::where([
             ["id", $booking_id]
         ]);

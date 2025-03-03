@@ -14,7 +14,8 @@ class BookingRequest extends FormRequest
     protected $auth; 
     protected $booking;
 
-    public function __construct(Guard $auth, Booking $booking) {
+    public function __construct(Guard $auth, Booking $booking)
+    {
         $this->auth = $auth;
         $this->booking = $booking;
     }
