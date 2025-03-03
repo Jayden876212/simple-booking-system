@@ -11,7 +11,6 @@ use Throwable;
 class RegistrationController extends Controller
 {
     protected $user;
-    protected $registrationService;
 
     public function __construct(User $user)
     {
