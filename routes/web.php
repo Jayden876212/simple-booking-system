@@ -23,7 +23,7 @@ Route::get("/account/login", [AuthenticationController::class, "showLogin"])->na
 Route::post("/account/login", [AuthenticationController::class, "login"])->name("login.handle");
 
 Route::get("/account/logout", [AuthenticationController::class, "logout"])->name("logout");
-Route::get("/account/delete", [AccountDeletionController::class, "delete"])->name("account.delete");
+Route::get("/account/delete", [AccountDeletionController::class, "deleteAccount"])->name("account.delete");
 
 // Bookings Pages
 Route::get("/bookings", [BookingsController::class, "showBookings"])->name("bookings.show");
