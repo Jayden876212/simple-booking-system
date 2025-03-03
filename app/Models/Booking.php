@@ -46,14 +46,11 @@ class Booking extends Model
 
     public static function getBookings(User|Authenticatable $user): Collection
     {
-        $username = $user["username"];
-
-        $bookings = self::select(
-            "id", "timeslot_start_time", "booking_date"
-        )->where([
-            ["booking_date", ">=", DB::raw("CURDATE()")],
-            ["username", $username]
-        ])->get();
+        $bookings = $user->bookings()->where([
+            ["booking_date", ">=", DB::raw("CURDATE()")]
+        ])->get(
+            ["id", "timeslot_start_time", "booking_date"]
+        );
 
         return $bookings;
     }
