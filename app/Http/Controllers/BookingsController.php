@@ -8,9 +8,11 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Timeslot;
+use App\Models\User;
 
 class BookingsController extends Controller
 {
@@ -20,7 +22,7 @@ class BookingsController extends Controller
     public function __construct(Guard $auth)
     {
         $this->auth = $auth;
-        $this->user = $auth->user();
+        $this->user = User::find($auth->id());
     }
 
     public function showBookings(): RedirectResponse|View

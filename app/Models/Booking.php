@@ -19,7 +19,7 @@ class Booking extends Model
     ];
     public $timestamps = false;
 
-    public static function createBooking(string $timeslot_start_time, string $booking_date, User|Authenticatable $user): Booking
+    public static function createBooking(string $timeslot_start_time, string $booking_date, User $user): Booking
     {
         $username = $user["username"];
 
@@ -44,7 +44,7 @@ class Booking extends Model
         return $unavailable_timeslots;
     }
 
-    public static function getBookings(User|Authenticatable $user): Collection
+    public static function getBookings(User $user): Collection
     {
         $bookings = $user->bookings()->where([
             ["booking_date", ">=", DB::raw("CURDATE()")]

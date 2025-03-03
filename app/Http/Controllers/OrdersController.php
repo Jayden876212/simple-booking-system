@@ -23,7 +23,7 @@ class OrdersController extends Controller
     public function __construct(Guard $auth, Order $order, Item $item, ItemOrder $itemOrder)
     {
         $this->auth = $auth;
-        $this->user = $auth->user();
+        $this->user = User::find($auth->id());
 
         $this->order = $order;
         $this->item = $item;

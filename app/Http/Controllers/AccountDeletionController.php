@@ -16,7 +16,7 @@ class AccountDeletionController extends Controller
     public function __construct(Guard $auth)
     {
         $this->auth = $auth;
-        $this->user = $auth->user();
+        $this->user = User::find($auth->id());
     }
 
     public function deleteAccount(Request $request): RedirectResponse
