@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookingRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Booking;
@@ -26,7 +27,7 @@ class BookingsController extends Controller
 
 
         return view(
-            "pages/bookings",
+            "pages.bookings",
             [
                 "timeslots" => $timeslots,
                 "bookings" => $bookings,
@@ -36,15 +37,10 @@ class BookingsController extends Controller
         )->with("page_title", "Bookings");
     }
 
-    public function makeBooking(Request $request) {
+    public function makeBooking(BookingRequest $request) {
         if (! Auth::check()) {
             return redirect("account/login")->with("error", "User is logged out.");
         }
-
-        $request->validate([
-            "booking_date" => ["required"],
-            "timeslot_start_time" => ["required"]
-        ]);
 
         $booking_date = $request->booking_date;
         $timeslot_start_time = $request->timeslot_start_time;
