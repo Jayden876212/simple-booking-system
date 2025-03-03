@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\TimeslotInFuture;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class BookingRequest extends FormRequest
 {
@@ -31,8 +33,19 @@ class BookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "booking_date" => ["required"],
-            "timeslot_start_time" => ["required"]
+            "booking_date" => [
+                "required", // Presence check
+                "date_format:Y-m-d", // Format check
+                Rule::date()->todayOrAfter() // Consistency check
+            ],
+            "timeslot_start_time" => [
+                "required", // Presence check
+                "date_format:H:i:s", // Format check
+                "exists:timeslots,timeslot_start_time", // Look up check
+                new TimeslotInFuture($this->booking_date)
+            ]
         ];
     }
+
+    // case UNAVAILABLE_TIMESLOT = "Timeslot is unavailable (there cannot be more than 10 tables booked in a given timeslot)"; // Look up check
 }

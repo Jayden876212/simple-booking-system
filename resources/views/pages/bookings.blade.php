@@ -33,6 +33,12 @@
                         <input class="form-control" value="{{ date("Y-m-d") }}" type="date" name="booking_date" id="bookingDate" required min="{{ date("Y-m-d") }}" onchange="
                             getUnavailableTimeslots('{{ route('get-unavailable-timeslots') }}', this.value, disableUnavailableTimeslots)
                         ">
+
+                        @error("booking_date")
+                            <div class="alert alert-danger m-2" role="alert">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="timeslotStartTime" class="form-label">Choose a timeslot for your reservation:</label>
@@ -91,6 +97,12 @@
                                 <option id="timeslotPlaceholder" selected value="">No time slots available</option>
                             @endif
                         </select>
+
+                        @error("timeslot_start_time")
+                            <div class="alert alert-danger m-2" role="alert">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
                 </div>
                 <div class="card-footer">
