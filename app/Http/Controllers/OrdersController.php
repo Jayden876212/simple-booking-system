@@ -20,8 +20,9 @@ class OrdersController extends Controller
     protected $order;
     protected $item;
     protected $itemOrder;
+    protected $booking;
 
-    public function __construct(Guard $auth, Order $order, Item $item, ItemOrder $itemOrder)
+    public function __construct(Guard $auth, Order $order, Item $item, ItemOrder $itemOrder, Booking $booking)
     {
         $this->auth = $auth;
         $this->user = User::find($auth->id());
@@ -29,6 +30,8 @@ class OrdersController extends Controller
         $this->order = $order;
         $this->item = $item;
         $this->itemOrder = $itemOrder;
+
+        $this->booking = $booking;
     }
 
     public function showOrders(Request $request) {
@@ -38,8 +41,8 @@ class OrdersController extends Controller
 
         $booking_id = $request->booking_id ?? FALSE;
 
-        $bookings = Booking::getBookings($this->user);
-        $items = Item::getItems();
+        $bookings = $this->booking->getBookings($this->user);
+        $items = $this->item->getItems();
         $orders = $this->order->getOrders(Auth::id(), $this->item, $this->itemOrder);
 
         $orders_and_items = [];
@@ -66,14 +69,14 @@ class OrdersController extends Controller
 
     public function makeOrder(Request $request) {
 
-        $items = Item::getItems();
+        $items = $this->item->getItems();
 
         $booking_id = $request->booking ?? FALSE;
         $items_and_quantities =  self::sortItems($request, $items);
         $submit_button_pressed = $request->order_items ?? FALSE;
 
         if ($submit_button_pressed) {
-            Order::orderItems($booking_id, $items_and_quantities);
+            $this->order->orderItems($booking_id, $items_and_quantities);
             return redirect("/bookings/orders")->with("success", "Successfully ordered items.");
         }
 
