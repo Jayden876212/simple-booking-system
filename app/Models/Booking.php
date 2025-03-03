@@ -3,10 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Database\Eloquent\Model;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Timeslot;
-use DateTime;
-use Exception;
 use DB;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -20,8 +19,10 @@ class Booking extends Model
     ];
     public $timestamps = false;
 
-    public static function createBooking($timeslot_start_time, $booking_date, $username) {
-        $booking = Booking::create([
+    public static function createBooking(string $timeslot_start_time, string $booking_date, User|Authenticatable $user): Booking {
+        $username = $user["username"];
+
+        $booking = self::create([
             "timeslot_start_time" => $timeslot_start_time,
             "username" => $username,
             "booking_date" => $booking_date
@@ -30,8 +31,8 @@ class Booking extends Model
         return $booking;
     }
 
-    public static function getUnavailableTimeslots($booking_date) {
-        $unavailable_timeslots = Booking::selectRaw(
+    public static function getUnavailableTimeslots(string $booking_date): Collection {
+        $unavailable_timeslots = self::selectRaw(
             "COUNT(id) AS number_of_tables_booked, timeslot_start_time"
         )->where("booking_date", $booking_date)
         ->groupBy("timeslot_start_time")
@@ -41,8 +42,10 @@ class Booking extends Model
         return $unavailable_timeslots;
     }
 
-    public static function getBookings($username) {
-        $bookings = Booking::select(
+    public static function getBookings(User|Authenticatable $user): Collection {
+        $username = $user["username"];
+
+        $bookings = self::select(
             "id", "timeslot_start_time", "booking_date"
         )->where([
             ["booking_date", ">=", DB::raw("CURDATE()")],
@@ -52,18 +55,17 @@ class Booking extends Model
         return $bookings;
     }
 
-    public static function getBooking($booking_id) {
-        $booking = Booking::get(
+    public static function getBooking(string $booking_id): Booking {
+        $booking = self::get(
             ["id", "timeslot_start_time", "booking_date", "username"]
         )->where("id", $booking_id)->sole();
 
         return $booking;
     }
     
-    public static function cancelBooking($booking_id, $username) {
-        $booking_to_be_cancelled = Booking::where([
-            ["id", $booking_id],
-            ["username", $username]
+    public static function cancelBooking(string $booking_id) {
+        $booking_to_be_cancelled = self::where([
+            ["id", $booking_id]
         ]);
         $booking_to_be_cancelled->delete();
 

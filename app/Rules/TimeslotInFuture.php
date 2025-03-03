@@ -21,7 +21,7 @@ class TimeslotInFuture implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if ($this->booking_date = date("Y-m-d")) {
+        if ($this->booking_date == date("Y-m-d")) {
             $timeslot = strtotime($value);
             $timeslot_in_the_past = $timeslot < time();
             if ($timeslot_in_the_past) { // in the past

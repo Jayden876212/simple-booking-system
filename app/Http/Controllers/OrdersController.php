@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -12,6 +13,15 @@ use App\Models\Item;
 
 class OrdersController extends Controller
 {
+    protected $auth;
+    protected $user;
+
+    public function __construct(Guard $auth)
+    {
+        $this->auth = $auth;
+        $this->user = $auth->user();
+    }
+
     public function showOrders(Request $request) {
         if (! Auth::check()) {
             return redirect("account/login")->with("error", "You must be logged in to an account to make an order.");
@@ -19,9 +29,7 @@ class OrdersController extends Controller
 
         $booking_id = $request->booking_id ?? FALSE;
 
-        $username = Auth::user()["username"];
-
-        $bookings = Booking::getBookings($username);
+        $bookings = Booking::getBookings($this->user);
         $items = Item::getItems();
         $orders = Order::getOrders(Auth::id());
 
@@ -33,7 +41,7 @@ class OrdersController extends Controller
             }
         }
 
-        return view("pages/orders", [
+        return view("pages.orders", [
             "booking_id" => $booking_id,
             "bookings" => $bookings,
             "items" => $items,
