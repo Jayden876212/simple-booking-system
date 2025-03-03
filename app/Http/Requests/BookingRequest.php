@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Booking;
+use App\Rules\TimeslotAvailable;
 use App\Rules\TimeslotInFuture;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
@@ -9,10 +11,12 @@ use Illuminate\Validation\Rule;
 
 class BookingRequest extends FormRequest
 {
-    protected $auth;    
+    protected $auth; 
+    protected $booking;
 
-    public function __construct(Guard $auth) {
+    public function __construct(Guard $auth, Booking $booking) {
         $this->auth = $auth;
+        $this->booking = $booking;
     }
 
     /**
@@ -42,10 +46,9 @@ class BookingRequest extends FormRequest
                 "required", // Presence check
                 "date_format:H:i:s", // Format check
                 "exists:timeslots,timeslot_start_time", // Look up check
-                new TimeslotInFuture($this->booking_date)
+                new TimeslotInFuture($this->booking_date),
+                new TimeslotAvailable($this->booking, $this->booking_date)
             ]
         ];
     }
-
-    // case UNAVAILABLE_TIMESLOT = "Timeslot is unavailable (there cannot be more than 10 tables booked in a given timeslot)"; // Look up check
 }

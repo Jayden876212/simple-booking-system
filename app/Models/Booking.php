@@ -32,19 +32,6 @@ class Booking extends Model
     public $timestamps = false;
 
     public static function createBooking($timeslot_start_time, $booking_date, $username) {
-        $unavailable_timeslots = self::getUnavailableTimeslots($booking_date);
-        $specific_timeslot_unavailable = FALSE;
-        foreach ($unavailable_timeslots as $unavailable_timeslot) {
-            if ($unavailable_timeslot["timeslot_start_time"] == $timeslot_start_time) {
-                $specific_timeslot_unavailable = TRUE;
-                break;
-            }
-        }
-
-        if ($specific_timeslot_unavailable) {
-            throw new Exception(BookingError::UNAVAILABLE_TIMESLOT->value, 1);
-        }
-
         $booking = Booking::create([
             "timeslot_start_time" => $timeslot_start_time,
             "username" => $username,
