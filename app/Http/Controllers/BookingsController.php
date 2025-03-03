@@ -26,7 +26,7 @@ class BookingsController extends Controller
     public function showBookings(): RedirectResponse|View
     {
         if (! Auth::check()) {
-            return redirect("account/login")->with("error", "User is logged out.");
+            return redirect()->route("login.show")->with("error", "User is logged out.");
         }
 
         $timeslots = Timeslot::getTimeslots();
@@ -48,25 +48,25 @@ class BookingsController extends Controller
 
     public function makeBooking(BookingRequest $request): RedirectResponse {
         if (! Auth::check()) {
-            return redirect("account/login")->with("error", "User is logged out.");
+            return redirect()->route("login.show")->with("error", "User is logged out.");
         }
 
         $booking_date = $request->booking_date;
         $timeslot_start_time = $request->timeslot_start_time;
         Booking::createBooking($timeslot_start_time, $booking_date, $this->user);
 
-        return redirect("/bookings")->with("success", "Booking successful!");
+        return redirect()->route("bookings.show")->with("success", "Booking successful!");
     }
 
     public function cancelBooking(Request $request): RedirectResponse {
         $booking_to_be_cancelled = $request->booking_id ?? FALSE;
 
         if (!$booking_to_be_cancelled) {
-            return redirect("bookings")->with("error", "You must provide the ID of the booking that you want to cancel.");
+            return redirect()->route("bookings.show")->with("error", "You must provide the ID of the booking that you want to cancel.");
         }
 
         Booking::cancelBooking($booking_to_be_cancelled);
 
-        return redirect("bookings")->with("success", "Successfully cancelled booking!");
+        return redirect()->route("bookings.show")->with("success", "Successfully cancelled booking!");
     }
 }
