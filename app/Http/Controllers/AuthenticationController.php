@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Auth;
 
 class AuthenticationController extends Controller
 {
@@ -15,6 +16,13 @@ class AuthenticationController extends Controller
     public function __construct(Guard $auth)
     {
         $this->auth = $auth;
+    }
+
+    public static function authenticate(array $credentials, Guard $auth): bool
+    {
+        $authentication_attempt = Auth::attempt($credentials);
+
+        return $authentication_attempt;
     }
 
     public function handleRedirect(): RedirectResponse
@@ -46,7 +54,7 @@ class AuthenticationController extends Controller
             "password" => $request["password"]
         ];
 
-        $authenticated_successfully = $this->auth->attempt($credentials);
+        $authenticated_successfully = self::authenticate($credentials, $this->auth);
 
         if (! $authenticated_successfully) {
             return back()->withErrors([
@@ -64,7 +72,7 @@ class AuthenticationController extends Controller
         if (! $this->auth->check()) {
             return redirect()->route("home")->with("error", "Logout failed. (You are not logged in.)");
         }
-        $this->auth->logout();
+        Auth::logout();
 
         return redirect()->route("home")->with("success", "Logout successfull!");
     }
