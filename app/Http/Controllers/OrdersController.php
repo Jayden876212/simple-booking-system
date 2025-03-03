@@ -16,6 +16,7 @@ class OrdersController extends Controller
 {
     protected $auth;
     protected $user;
+
     protected $order;
     protected $item;
     protected $itemOrder;
@@ -39,7 +40,7 @@ class OrdersController extends Controller
 
         $bookings = Booking::getBookings($this->user);
         $items = Item::getItems();
-        $orders = Order::getOrders(Auth::id());
+        $orders = $this->order->getOrders(Auth::id(), $this->item, $this->itemOrder);
 
         $orders_and_items = [];
         if (isset($orders)) {

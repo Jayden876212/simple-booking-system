@@ -120,12 +120,19 @@ class Order extends Model
         ItemOrder::insert($rows);
     }
 
-    public static function getOrders($user_id) {
+    public function getOrders($user_id, Item $item, ItemOrder $itemOrder) {
+        $items = $item->getTable();
+        $item_orders = $itemOrder->getTable();
+        $orders_table = $this->getTable();
+
         $orders = User::find($user_id)->orders()->toBase()
-        ->join("item_orders", "orders.id", "=", "item_orders.order_id")
-        ->join("items", "items.name", "=", "item_orders.item_name")
-        ->selectRaw("orders.id, MAX(orders.datetime_ordered) AS datetime_ordered, SUM(item_orders.quantity * items.price) AS total_price")
-        ->groupBy("orders.id")
+        ->join($item_orders, "$orders_table.id", "=", "$item_orders.order_id")
+        ->join($items, "$items.name", "=", "$item_orders.item_name")
+        ->selectRaw(
+            "$orders_table.id,
+            MAX($orders_table.datetime_ordered) AS datetime_ordered,
+            SUM($item_orders.quantity * $items.price) AS total_price"
+        )->groupBy("$orders_table.id")
         ->get();
 
         return $orders;

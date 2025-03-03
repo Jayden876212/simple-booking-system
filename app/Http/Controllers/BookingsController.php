@@ -13,16 +13,26 @@ use App\Models\Booking;
 use App\Models\Order;
 use App\Models\Timeslot;
 use App\Models\User;
+use App\Models\Item;
+use App\Models\ItemOrder;
 
 class BookingsController extends Controller
 {
     protected $auth;
     protected $user;
 
-    public function __construct(Guard $auth)
+    protected $order;
+    protected $item;
+    protected $itemOrder;
+
+    public function __construct(Guard $auth, Order $order, Item $item, ItemOrder $itemOrder)
     {
         $this->auth = $auth;
         $this->user = User::find($auth->id());
+
+        $this->order = $order;
+        $this->item = $item;
+        $this->itemOrder = $itemOrder;
     }
 
     public function showBookings(): RedirectResponse|View
@@ -34,7 +44,7 @@ class BookingsController extends Controller
         $timeslots = Timeslot::getTimeslots();
         $bookings = Booking::getBookings($this->user);
         $unavailable_timeslots = Booking::getUnavailableTimeslots(date("Y-m-d"));
-        $orders = Order::getOrders(Auth::id());
+        $orders = $this->order->getOrders(Auth::id(), $this->item, $this->itemOrder);
 
 
         return view(
