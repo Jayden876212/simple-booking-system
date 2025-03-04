@@ -59,6 +59,12 @@
                                 @endif
                             </select>
                         </section>
+
+                        @error("booking")
+                            <div class="alert alert-danger m-2" role="alert">
+                                {{ $message }}
+                            </div>
+                        @enderror
                     </div>
 
                     <div class="list-group-item">
@@ -125,6 +131,13 @@
                                 </table>
                             </div>
                         </div>
+                        @error("items.*")
+                            <div class="row">
+                                <div class="alert alert-danger m-2" role="alert">
+                                    {{ $message }}
+                                </div>
+                            </div>
+                        @enderror
                     </div>
                 </section>
 
