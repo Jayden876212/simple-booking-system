@@ -55,7 +55,7 @@ class Booking extends Model
         return $bookings;
     }
 
-    public static function getBooking(string $booking_id): Booking
+    public static function getBooking(int $booking_id): Booking
     {
         $booking = self::get(
             ["id", "timeslot_start_time", "booking_date", "username"]
@@ -64,7 +64,7 @@ class Booking extends Model
         return $booking;
     }
     
-    public static function cancelBooking(string $booking_id)
+    public static function cancelBooking(int $booking_id)
     {
         $booking_to_be_cancelled = self::where([
             ["id", $booking_id]

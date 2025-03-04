@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Traits\ToStringFormat;
+use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
@@ -19,8 +20,23 @@ class Order extends Model
     ];
     public $timestamps = false;
 
-    public static function makeOrder(Booking $booking) {
-        $created_order = Order::create([
+    protected $auth;
+    protected $users;
+    protected $itemOrders;
+
+    protected $user;
+
+    public function __construct(Guard $auth, User $users, ItemOrder $itemOrders)
+    {
+        $this->auth = $auth;
+        $this->users = $users;
+        $this->itemOrders = $itemOrders;
+
+        $this->user = $users->find($auth->id());
+    }
+
+    private function makeOrder(Booking $booking) {
+        $created_order = $this->itemOrders->create([
             "booking_id" => $booking->id,
             "datetime_ordered" => DB::raw("NOW()")
         ]);
@@ -28,7 +44,7 @@ class Order extends Model
         return $created_order;
     }
 
-    private static function createRows($items, Order $order) {
+    private function orderItems($items, Order $order) {
         $item_orders = [];
         foreach ($items as $item_name => $item_quantity) {
             $item_orders[] = [
@@ -37,7 +53,7 @@ class Order extends Model
                 "quantity" => $item_quantity
             ];
         }
-        $created_item_orders = ItemOrder::insert($item_orders);
+        $created_item_orders = $this->itemOrders->insert($item_orders);
 
         return $created_item_orders;
     }
@@ -56,7 +72,8 @@ class Order extends Model
         return $items;
     }
 
-    public static function orderItems($booking_id, $items) {
+    public static function makeOrderOfItems($booking_id, $items) {
+        // Trim items sent in the form request that are of quantity 0
         $items = self::removeUnselectedItems($items);
 
         $booking = Booking::getBooking($booking_id);
