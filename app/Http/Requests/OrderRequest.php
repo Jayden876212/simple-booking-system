@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Booking;
 use App\Models\User;
 use App\Rules\BookingBelongsToUser;
+use App\Rules\OrderAtLeastOneItem;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -48,7 +49,8 @@ class OrderRequest extends FormRequest
                 new BookingBelongsToUser($this->bookings, $this->user)
             ],
             "items" => [
-                "required"
+                "required",
+                new OrderAtLeastOneItem()
             ],
             "items.*" => [
                 "required",
