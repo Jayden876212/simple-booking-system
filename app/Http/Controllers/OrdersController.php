@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OrderRequest;
 use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
@@ -36,7 +37,7 @@ class OrdersController extends Controller
         $this->booking = $booking;
     }
 
-    public function showOrders(Request $request) {
+    public function showOrders(OrderRequest $request) {
         if (! Auth::check()) {
             return redirect()->route("login.show")->with("error", "You must be logged in to an account to make an order.");
         }

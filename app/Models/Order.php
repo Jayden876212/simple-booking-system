@@ -29,17 +29,27 @@ class Order extends Model
     ];
     public $timestamps = false;
 
-    private static function createRows($items_and_quantities, $last_insert_id) {
-        $rows = [];
-        foreach ($items_and_quantities as $item_name => $item_quantity) {
-            $rows[] = [
+    public static function makeOrder(Booking $booking) {
+        $created_order = Order::create([
+            "booking_id" => $booking->id,
+            "datetime_ordered" => DB::raw("NOW()")
+        ]);
+
+        return $created_order;
+    }
+
+    private static function createRows($items, Order $order) {
+        $item_orders = [];
+        foreach ($items as $item_name => $item_quantity) {
+            $item_orders[] = [
                 "item_name" => $item_name,
-                "order_id" => $last_insert_id,
+                "order_id" => $order->id,
                 "quantity" => $item_quantity
             ];
         }
+        $created_item_orders = ItemOrder::insert($item_orders);
 
-        return $rows;
+        return $created_item_orders;
     }
 
     public static function orderItems($booking_id, $items_and_quantities) {
@@ -108,14 +118,8 @@ class Order extends Model
             throw new Exception($error->value, 1);
         }
 
-
-        $created_order = Order::create([
-            "booking_id" => $booking_id,
-            "datetime_ordered" => DB::raw("NOW()")
-        ]);
-        $last_insert_id = $created_order->id;
-        $rows = self::createRows($items_and_quantities, $last_insert_id);
-        ItemOrder::insert($rows);
+        $created_order = self::makeOrder($booking);
+        self::createRows($items_and_quantities, $created_order);
     }
 
     public function getOrders($user_id, Item $item, ItemOrder $itemOrder) {
