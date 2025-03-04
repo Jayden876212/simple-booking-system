@@ -52,38 +52,22 @@ class Order extends Model
         return $created_item_orders;
     }
 
-    public static function orderItems($booking_id, $items_and_quantities) {
-        $items_are_found = false;
-        foreach ($items_and_quantities as $name => $quantity) {
-            if ($name AND $quantity) {
-                $items_are_found = true;
+    private static function removeUnselectedItems($items) {
+        $items_to_be_removed = [];
+        foreach ($items as $name => $quantity) {
+            if ($quantity == 0) {
+                $items_to_be_removed[] = $name;
             }
         }
-
-        $items_exist = true;
-        $quantity_less_than_zero = false;
-        if ($items_are_found) {
-            foreach ($items_and_quantities as $name => $quantity) {
-                $item = Item::getItem($name);
-
-                if (! $item) {
-                    $items_exist = false;
-                    break;
-                }
-            }
-
-            $items_to_be_removed = [];
-            foreach ($items_and_quantities as $name => $quantity) {
-                if ($quantity < 0) {
-                    $quantity_less_than_zero = true;
-                } else if ($quantity == 0) {
-                    $items_to_be_removed[] = $name;
-                }
-            }
-            foreach ($items_to_be_removed as $item_name) {
-                unset($items_and_quantities[$item_name]);
-            }
+        foreach ($items_to_be_removed as $item_name) {
+            unset($items[$item_name]);
         }
+
+        return $items;
+    }
+
+    public static function orderItems($booking_id, $items) {
+        $items = self::removeUnselectedItems($items);
 
         $ordered_timeslots = Timeslot::getOrderedTimeslots()->toArray();
         $timeslot_start_times = [];
@@ -103,23 +87,9 @@ class Order extends Model
         $valid_start_datetime_unix = strtotime($valid_start_datetime);
         $valid_end_datetime_unix = strtotime($valid_end_datetime);
 
-        $error = match(true) {
-            ($booking_id == NULL) OR ($booking_id == 0) OR ($booking_id == "") => OrderError::BOOKING_ID_EMPTY,
-            ! $items_are_found => OrderError::AT_LEAST_ONE_ITEM,
-            ! $booking => OrderError::BOOKING_ID_NOT_EXIST,
-            ! $items_exist => OrderError::ITEM_NAMES_NOT_EXIST,
-            $booking["username"] != Auth::user()["username"] => OrderError::USER_NO_PERMISSION,
-            $quantity_less_than_zero => OrderError::ITEM_QUANTITY_ZERO_OR_LESS,
-            // (time() < $valid_start_datetime_unix) OR (time() >= $valid_end_datetime_unix) => OrderError::BOOKING_NOT_IN_TIMESLOT,
-            default => false
-        };
-
-        if ($error) {
-            throw new Exception($error->value, 1);
-        }
 
         $created_order = self::makeOrder($booking);
-        self::createRows($items_and_quantities, $created_order);
+        self::createRows($items, $created_order);
     }
 
     public function getOrders($user_id, Item $item, ItemOrder $itemOrder) {
