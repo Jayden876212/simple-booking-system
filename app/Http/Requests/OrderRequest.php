@@ -45,6 +45,7 @@ class OrderRequest extends FormRequest
             "booking" => [
                 "required",
                 "exists:bookings,id",
+                new BookingBelongsToUser($this->bookings, $this->user)
             ],
             "items" => [
                 "required"
