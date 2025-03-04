@@ -54,6 +54,7 @@ class OrderRequest extends FormRequest
             ],
             "items.*" => [
                 "required",
+                "gte:0"
             ]
         ];
     }

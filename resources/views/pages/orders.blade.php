@@ -124,6 +124,17 @@
                                                             </p>
                                                         </td>
                                                     </tr>
+                                                    @error("items.".$item["name"])
+                                                        <tr>
+                                                            <td colspan="4">
+                                                                <div class="row">
+                                                                    <div class="alert alert-danger m-2" role="alert">
+                                                                        {{ $message }}
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @enderror
                                                 @endforeach
                                             @endif
                                         @endif
@@ -131,7 +142,7 @@
                                 </table>
                             </div>
                         </div>
-                        @error("items.*")
+                        @error("items")
                             <div class="row">
                                 <div class="alert alert-danger m-2" role="alert">
                                     {{ $message }}
