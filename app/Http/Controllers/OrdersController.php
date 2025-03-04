@@ -37,7 +37,7 @@ class OrdersController extends Controller
         $this->booking = $booking;
     }
 
-    public function showOrders(OrderRequest $request) {
+    public function showOrders(Request $request) {
         if (! Auth::check()) {
             return redirect()->route("login.show")->with("error", "You must be logged in to an account to make an order.");
         }
@@ -70,7 +70,7 @@ class OrdersController extends Controller
         ])->with("page_title", "Orders");
     }
 
-    public function makeOrder(Request $request) {
+    public function makeOrder(OrderRequest $request) {
 
         $items = $this->item->getItems();
 

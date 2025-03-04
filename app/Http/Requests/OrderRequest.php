@@ -2,19 +2,24 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Booking;
 use App\Models\User;
+use App\Rules\BookingBelongsToUser;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 
 class OrderRequest extends FormRequest
 {
-    protected $user;
     protected $auth;
+    protected $user;
+    protected $bookings;
 
-    public function __construct(User $user, Guard $auth)
+    public function __construct(User $user, Guard $auth, Booking $bookings)
     {
         $this->auth = $auth;
-        $this->user = $user;
+        $this->user = $user->find($auth->id());
+
+        $this->bookings = $bookings;
     }
 
     /**
@@ -37,7 +42,16 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            "booking" => [
+                "required",
+                "exists:bookings,id",
+            ],
+            "items" => [
+                "required"
+            ],
+            "items.*" => [
+                "required",
+            ]
         ];
     }
 }
