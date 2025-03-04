@@ -3,9 +3,11 @@
 namespace App\Http\Requests;
 
 use App\Models\Booking;
+use App\Models\Item;
 use App\Models\User;
 use App\Rules\BookingBelongsToUser;
 use App\Rules\OrderAtLeastOneItem;
+use App\Rules\OrderItemsExist;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -14,13 +16,15 @@ class OrderRequest extends FormRequest
     protected $auth;
     protected $user;
     protected $bookings;
+    protected $items;
 
-    public function __construct(User $user, Guard $auth, Booking $bookings)
+    public function __construct(User $user, Guard $auth, Booking $bookings, Item $items)
     {
         $this->auth = $auth;
         $this->user = $user->find($auth->id());
 
         $this->bookings = $bookings;
+        $this->items = $items;
     }
 
     /**
@@ -50,7 +54,8 @@ class OrderRequest extends FormRequest
             ],
             "items" => [
                 "required",
-                new OrderAtLeastOneItem()
+                new OrderAtLeastOneItem(),
+                new OrderItemsExist($this->items)
             ],
             "items.*" => [
                 "required",
