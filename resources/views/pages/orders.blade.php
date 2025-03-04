@@ -100,7 +100,7 @@
                                                                 class="item-quantity form-control"
                                                                 type="number"
                                                                 id="quantity_of_{{ $item["name"] }}"
-                                                                name="quantity_of_{{ $item["name"] }}"
+                                                                name="items[{{ $item["name"] }}]"
                                                                 value="0"
                                                                 onchange="updateItems()"
                                                                 title="Select the amount of {{ $item["name"] }}(s) that you want"

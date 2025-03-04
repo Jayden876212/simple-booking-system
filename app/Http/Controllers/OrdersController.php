@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use Illuminate\Contracts\Auth\Guard;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -20,6 +21,7 @@ class OrdersController extends Controller
     protected $order;
     protected $item;
     protected $itemOrder;
+
     protected $booking;
 
     public function __construct(Guard $auth, Order $order, Item $item, ItemOrder $itemOrder, Booking $booking)
@@ -72,7 +74,7 @@ class OrdersController extends Controller
         $items = $this->item->getItems();
 
         $booking_id = $request->booking ?? FALSE;
-        $items_and_quantities =  self::sortItems($request, $items);
+        $items_and_quantities =  self::sortItems($request);
         $submit_button_pressed = $request->order_items ?? FALSE;
 
         if ($submit_button_pressed) {
@@ -81,14 +83,10 @@ class OrdersController extends Controller
         }
     }
 
-    private function sortItems(Request $request, $items) {
-        $input = $request->all();
-        $items_and_quantities = [];
-        foreach ($items as $item) {
-            $item_quantity = $input["quantity_of_" . $item["name"]] ?? NULL;
-            $items_and_quantities[$item["name"]] = $item_quantity;
-        }
+    private function sortItems(Request $request) {
+        $items = $request["items"];
+        
 
-        return $items_and_quantities;
+        return $items;
     }
 }

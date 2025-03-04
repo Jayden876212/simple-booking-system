@@ -44,11 +44,9 @@ class Order extends Model
 
     public static function orderItems($booking_id, $items_and_quantities) {
         $items_are_found = false;
-        if (isset($items_and_quantities)) {
-            foreach ($items_and_quantities as $name => $quantity) {
-                if ($name AND $quantity) {
-                    $items_are_found = true;
-                }
+        foreach ($items_and_quantities as $name => $quantity) {
+            if ($name AND $quantity) {
+                $items_are_found = true;
             }
         }
 
