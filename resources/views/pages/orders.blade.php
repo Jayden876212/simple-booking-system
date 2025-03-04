@@ -108,6 +108,7 @@
                                                                 id="quantity_of_{{ $item["name"] }}"
                                                                 name="items[{{ $item["name"] }}]"
                                                                 value="0"
+                                                                min="0"
                                                                 onchange="updateItems()"
                                                                 title="Select the amount of {{ $item["name"] }}(s) that you want"
                                                             >
