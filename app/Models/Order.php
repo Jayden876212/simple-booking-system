@@ -69,24 +69,7 @@ class Order extends Model
     public static function orderItems($booking_id, $items) {
         $items = self::removeUnselectedItems($items);
 
-        $ordered_timeslots = Timeslot::getOrderedTimeslots()->toArray();
-        $timeslot_start_times = [];
-        foreach ($ordered_timeslots as $timeslot) {
-            $timeslot_start_times[] = $timeslot["timeslot_start_time"];
-        }
-
         $booking = Booking::getBooking($booking_id);
-        $start_time_key = array_search($booking["timeslot_start_time"], $timeslot_start_times);
-       
-        $valid_start_time = $ordered_timeslots[$start_time_key]["timeslot_start_time"];
-        $valid_end_time = $ordered_timeslots[$start_time_key + 1]["timeslot_start_time"];
-
-        $valid_start_datetime = $booking["booking_date"] . " " . $ordered_timeslots[$start_time_key]["timeslot_start_time"];
-        $valid_end_datetime = $booking["booking_date"] . " " . $ordered_timeslots[$start_time_key + 1]["timeslot_start_time"];
-
-        $valid_start_datetime_unix = strtotime($valid_start_datetime);
-        $valid_end_datetime_unix = strtotime($valid_end_datetime);
-
 
         $created_order = self::makeOrder($booking);
         self::createRows($items, $created_order);
