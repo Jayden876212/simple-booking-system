@@ -75,19 +75,12 @@ class OrdersController extends Controller
         $items = $this->item->getItems();
 
         $booking_id = $request->booking ?? FALSE;
-        $items_and_quantities =  self::sortItems($request);
+        $items = $request["items"];
         $submit_button_pressed = $request->order_items ?? FALSE;
 
         if ($submit_button_pressed) {
-            $this->order->orderItems($booking_id, $items_and_quantities);
+            $this->order->orderItems($booking_id, $items);
             return redirect()->route("orders.show")->with("success", "Successfully ordered items.");
         }
-    }
-
-    private function sortItems(Request $request) {
-        $items = $request["items"];
-        
-
-        return $items;
     }
 }
