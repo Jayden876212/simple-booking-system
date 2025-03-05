@@ -52,7 +52,7 @@ class OrderInTimeslot implements ValidationRule
             $valid_end_time = date("H:i:s", $valid_end_datetime_unix);
         }
 
-        $order_not_in_timeslot = (time() < $valid_start_datetime_unix) OR (time() >= $valid_end_datetime_unix);
+        $order_not_in_timeslot = (time() < $valid_start_datetime_unix) || (time() >= $valid_end_datetime_unix);
         if ($order_not_in_timeslot) {
             $fail("Your order must be done at the time between your timeslot's start time ($valid_start_time) and the next timeslot's start time ($valid_end_time).");
         }
