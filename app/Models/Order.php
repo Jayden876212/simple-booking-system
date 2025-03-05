@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Carbon\Traits\ToStringFormat;
 use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Auth;
 
 use Exception;
 use DB;
+use Throwable;
 
 class Order extends Model
 {
@@ -20,23 +22,27 @@ class Order extends Model
     ];
     public $timestamps = false;
 
-    protected $auth;
-    protected $users;
-    protected $itemOrders;
+    // ------------------
 
-    protected $user;
-
-    public function __construct(Guard $auth, User $users, ItemOrder $itemOrders)
+    public static function makeOrder(Booking $booking, array $chosen_items, Purchase $purchases) 
     {
-        $this->auth = $auth;
-        $this->users = $users;
-        $this->itemOrders = $itemOrders;
+        $order = self::insertOrderForBooking($booking);
+        
+        if ($order) {
+            try {
+                $purchases::makePurchases($chosen_items, $order);
+            } catch (Throwable $caught) {
+                $order->delete();
+                throw $caught;
+            }
+        }
 
-        $this->user = $users->find($auth->id());
+        return [$order, $purchases];
     }
 
-    private function makeOrder(Booking $booking) {
-        $created_order = $this->itemOrders->create([
+    private static function insertOrderForBooking(Booking $booking): mixed
+    {
+        $created_order = self::create([
             "booking_id" => $booking->id,
             "datetime_ordered" => DB::raw("NOW()")
         ]);
@@ -44,80 +50,24 @@ class Order extends Model
         return $created_order;
     }
 
-    private function orderItems($items, Order $order) {
-        $item_orders = [];
-        foreach ($items as $item_name => $item_quantity) {
-            $item_orders[] = [
-                "item_name" => $item_name,
-                "order_id" => $order->id,
-                "quantity" => $item_quantity
-            ];
-        }
-        $created_item_orders = $this->itemOrders->insert($item_orders);
+    // ------------------
 
-        return $created_item_orders;
-    }
-
-    private static function removeUnselectedItems($items) {
-        $items_to_be_removed = [];
-        foreach ($items as $name => $quantity) {
-            if ($quantity == 0) {
-                $items_to_be_removed[] = $name;
-            }
-        }
-        foreach ($items_to_be_removed as $item_name) {
-            unset($items[$item_name]);
-        }
-
-        return $items;
-    }
-
-    public static function makeOrderOfItems($booking_id, $items) {
-        // Trim items sent in the form request that are of quantity 0
-        $items = self::removeUnselectedItems($items);
-
-        $booking = Booking::getBooking($booking_id);
-
-        $created_order = self::makeOrder($booking);
-        self::createRows($items, $created_order);
-    }
-
-    public function getOrders($user_id, Item $item, ItemOrder $itemOrder) {
-        $items = $item->getTable();
-        $item_orders = $itemOrder->getTable();
+    public function getOrders(User $user, Item $items, Purchase $purchases): Collection {
+        $items_table = $items->getTable();
+        $purchases_table = $purchases->getTable();
         $orders_table = $this->getTable();
 
-        $orders = User::find($user_id)->orders()->toBase()
-        ->join($item_orders, "$orders_table.id", "=", "$item_orders.order_id")
-        ->join($items, "$items.name", "=", "$item_orders.item_name")
+        $orders = $user->orders()->toBase()
+        ->join($purchases_table, "$orders_table.id", "=", "$purchases_table.order_id")
+        ->join($items_table, "$items_table.name", "=", "$purchases_table.item_name")
         ->selectRaw(
             "$orders_table.id,
             MAX($orders_table.datetime_ordered) AS datetime_ordered,
-            SUM($item_orders.quantity * $items.price) AS total_price"
+            SUM($purchases_table.quantity * $items_table.price) AS total_price"
         )->groupBy("$orders_table.id")
         ->get();
 
         return $orders;
-    }
-
-    public function getOrderItems($user_id, $order_id, Item $item, ItemOrder $itemOrder) {
-        $items = $item->getTable();
-        $item_orders = $itemOrder->getTable();
-        $orders = $this->getTable();
-
-        $order = User::find($user_id)->orders()->toBase()
-        ->where("$orders.id", "=", $order_id)
-        ->join($item_orders, "$orders.id", "=", "$item_orders.order_id")
-        ->join($items, "$items.name", "=", "$item_orders.item_name")
-        ->selectRaw(
-            "$item_orders.item_name,
-            SUM($item_orders.quantity) AS quantity,
-            SUM($items.price) AS price,
-            SUM($item_orders.quantity * $items.price) AS total_price"
-        )->groupBy("$item_orders.item_name")
-        ->get();
-
-        return $order;
     }
 
     public function items(): BelongsToMany
