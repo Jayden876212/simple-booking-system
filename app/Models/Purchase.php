@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 
 class Purchase extends Model
 {
-    protected $table = "item_orders";
+    protected $table = "purchases";
     protected $fillable = [
         "id",
         "item_name",
