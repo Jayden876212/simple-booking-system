@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 
@@ -12,7 +13,7 @@ class HomeController extends Controller
         return view("pages.home")->with("page_title", "Home");
     }    
 
-    public function handleRedirect(Request $request) {
+    public function handleRedirect(Request $request): RedirectResponse {
         $success = $request->session()->get("success") ?? false;
         $error = $request->session()->get("error") ?? false;
         $has_error_or_success = $error or $success;

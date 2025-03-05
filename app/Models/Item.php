@@ -17,14 +17,14 @@ class Item extends Model
     ];
     public $timestamps = false;
 
-    public static function getItems() {
+    public static function getItems(): Collection {
         $items = Item::get(["name", "price"]);
 
         return $items;
     }
 
-    public static function getItem($item_name) {
-        $item = Item::where("name", $item_name)->get(["name", "price"]);
+    public static function getItem($item_name): Item {
+        $item = Item::where("name", $item_name)->get(["name", "price"])->sole();
 
         return $item;
     }

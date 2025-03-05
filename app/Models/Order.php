@@ -24,7 +24,7 @@ class Order extends Model
 
     // ------------------
 
-    public static function makeOrder(Booking $booking, array $chosen_items, Purchase $purchases) 
+    public static function makeOrder(Booking $booking, array $chosen_items, Purchase $purchases): array 
     {
         $order = self::insertOrderForBooking($booking);
         
@@ -40,7 +40,7 @@ class Order extends Model
         return [$order, $purchases];
     }
 
-    private static function insertOrderForBooking(Booking $booking): mixed
+    private static function insertOrderForBooking(Booking $booking): Order
     {
         $created_order = self::create([
             "booking_id" => $booking->id,

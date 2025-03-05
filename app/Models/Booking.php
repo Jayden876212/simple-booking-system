@@ -64,7 +64,7 @@ class Booking extends Model
         return $booking;
     }
     
-    public static function cancelBooking(int $booking_id)
+    public static function cancelBooking(int $booking_id): Booking
     {
         $booking_to_be_cancelled = self::where([
             ["id", $booking_id]

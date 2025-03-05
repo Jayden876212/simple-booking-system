@@ -18,7 +18,7 @@ class Purchase extends Model
 
     public $timestamps = false;
 
-    public static function makePurchases(array $chosen_items, Order $order): mixed
+    public static function makePurchases(array $chosen_items, Order $order): bool
     {
         $purchases = [];
         foreach ($chosen_items as $item_name => $item_quantity) {
