@@ -10,29 +10,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Booking;
-use App\Models\Order;
 use App\Models\Timeslot;
 use App\Models\User;
-use App\Models\Item;
-use App\Models\ItemOrder;
+use Throwable;
 
 class BookingsController extends Controller
 {
     protected $auth;
     protected $user;
 
-    protected $order;
-    protected $item;
-    protected $itemOrder;
+    protected $timeslots;
+    protected $bookings;
 
-    public function __construct(Guard $auth, Order $order, Item $item, ItemOrder $itemOrder)
+    public function __construct(Guard $auth, User $users, Timeslot $timeslots, Booking $bookings)
     {
         $this->auth = $auth;
-        $this->user = User::find($auth->id());
+        $this->user = $users::find($auth->id());
 
-        $this->order = $order;
-        $this->item = $item;
-        $this->itemOrder = $itemOrder;
+        $this->timeslots = $timeslots;
+        $this->bookings = $bookings;
     }
 
     public function showBookings(): RedirectResponse|View
@@ -41,11 +37,9 @@ class BookingsController extends Controller
             return redirect()->route("login.show")->with("error", "User is logged out.");
         }
 
-        $timeslots = Timeslot::getTimeslots();
-        $bookings = Booking::getBookings($this->user);
-        $unavailable_timeslots = Booking::getUnavailableTimeslots(date("Y-m-d"));
-        $orders = $this->order->getOrders(Auth::id(), $this->item, $this->itemOrder);
-
+        $timeslots = $this->timeslots->getTimeslots();
+        $bookings = $this->bookings->getBookings($this->user);
+        $unavailable_timeslots = $this->bookings->getUnavailableTimeslots(date("Y-m-d"));
 
         return view(
             "pages.bookings",
@@ -53,13 +47,12 @@ class BookingsController extends Controller
                 "timeslots" => $timeslots,
                 "bookings" => $bookings,
                 "unavailable_timeslots" => $unavailable_timeslots,
-                "orders" => $orders->toArray()
             ]
         )->with("page_title", "Bookings");
     }
 
     public function makeBooking(BookingRequest $request): RedirectResponse {
-        if (! Auth::check()) {
+        if (! $this->auth->check()) {
             return redirect()->route("login.show")->with("error", "User is logged out.");
         }
 
@@ -77,7 +70,11 @@ class BookingsController extends Controller
             return redirect()->route("bookings.show")->with("error", "You must provide the ID of the booking that you want to cancel.");
         }
 
-        Booking::cancelBooking($booking_to_be_cancelled);
+        try {
+            $this->bookings->cancelBooking($booking_to_be_cancelled);
+        } catch (Throwable $caught) {
+            return redirect()->route("bookings.show")->with("error", "Booking cancellation failed (Database error).");
+        }
 
         return redirect()->route("bookings.show")->with("success", "Successfully cancelled booking!");
     }
