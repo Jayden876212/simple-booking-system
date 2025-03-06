@@ -39,7 +39,7 @@ class BookingsController extends Controller
 
         $timeslots = $this->timeslots->getTimeslots();
         $bookings = $this->bookings->getBookings($this->user);
-        $unavailable_timeslots = $this->bookings->getUnavailableTimeslots(date("Y-m-d"));
+        $unavailable_timeslots = $this->timeslots->getUnavailableTimeslots(date("Y-m-d"), $this->bookings);
 
         return view(
             "pages.bookings",

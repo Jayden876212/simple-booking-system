@@ -32,18 +32,6 @@ class Booking extends Model
         return $booking;
     }
 
-    public static function getUnavailableTimeslots(string $booking_date): Collection
-    {
-        $unavailable_timeslots = self::selectRaw(
-            "COUNT(id) AS number_of_tables_booked, timeslot_start_time"
-        )->where("booking_date", $booking_date)
-        ->groupBy("timeslot_start_time")
-        ->having("number_of_tables_booked", ">=", 10)
-        ->get();
-
-        return $unavailable_timeslots;
-    }
-
     public static function getBookings(User $user): Collection
     {
         $bookings = $user->bookings()->where([

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Booking;
+use App\Models\Timeslot;
 use App\Rules\TimeslotAvailable;
 use App\Rules\TimeslotInFuture;
 use Illuminate\Contracts\Auth\Guard;
@@ -13,11 +14,13 @@ class BookingRequest extends FormRequest
 {
     protected $auth; 
     protected $booking;
+    protected $timeslots;
 
-    public function __construct(Guard $auth, Booking $booking)
+    public function __construct(Guard $auth, Booking $booking, Timeslot $timeslots)
     {
         $this->auth = $auth;
         $this->booking = $booking;
+        $this->timeslots = $timeslots;
     }
 
     /**
@@ -48,7 +51,7 @@ class BookingRequest extends FormRequest
                 "date_format:H:i:s", // Format check
                 "exists:timeslots,timeslot_start_time", // Look up check
                 new TimeslotInFuture($this->booking_date),
-                new TimeslotAvailable($this->booking, $this->booking_date)
+                new TimeslotAvailable($this->booking, $this->booking_date, $this->timeslots)
             ]
         ];
     }
